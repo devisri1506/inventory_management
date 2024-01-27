@@ -293,15 +293,16 @@ const Orders = () => {
                 {/* Assuming you have predefined options for Type and Status */}
                 {column.field === 'Type' ? (
                   <>
-                    <MenuItem value="Type1">Type 1</MenuItem>
-                    <MenuItem value="Type2">Type 2</MenuItem>
+                    <MenuItem value="Fresh">Fresh</MenuItem>
+                    <MenuItem value="Defect">Defect</MenuItem>
+                    <MenuItem value="Light Defect">Light Defect</MenuItem>
                     {/* Add more options as needed */}
                   </>
                 ) : (
                   <>
-                    <MenuItem value="Pending">Pending</MenuItem>
-                    <MenuItem value="In Progress">In Progress</MenuItem>
-                    <MenuItem value="Completed">Completed</MenuItem>
+                    <MenuItem value="Sold">Sold</MenuItem>
+                    <MenuItem value="In Sales">In Sales</MenuItem>
+                    
                   </>
                 )}
               </Select>

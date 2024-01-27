@@ -1,4 +1,3 @@
-// App.js
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
@@ -7,15 +6,15 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { Navbar, Footer, Sidebar, ThemeSettings } from './components';
 import { Ecommerce, Orders, Calendar, Employees, Stacked, Pyramid, Customers, Kanban, Line, Area, Bar, Pie, Financial, ColorPicker, ColorMapping, Editor } from './pages';
 import Login from './login/Login';
-import Register from "./Register/Register"
+import Register from './Register/Register';
 import './App.css';
-import { useState } from "react";
+import { useState } from 'react';
 import { useStateContext } from './contexts/ContextProvider';
 
 const App = () => {
-  const { setCurrentColor, setCurrentMode, currentMode, currentColor, themeSettings, setThemeSettings } = useStateContext();
+  const { setCurrentColor, setCurrentMode, currentMode, currentColor, themeSettings, setThemeSettings, activeMenu } = useStateContext();
   const [userstate, setUserState] = useState({});
-  const isHomePage=window.location.pathname==='/';
+  const isHomePage = window.location.pathname === '/';
   const isLoginPage = window.location.pathname === '/login';
   const isSignupPage = window.location.pathname === '/signup';
 
@@ -28,15 +27,17 @@ const App = () => {
     }
   }, []);
 
+  const mainContentStyle = {
+    marginLeft: activeMenu && !isLoginPage && !isSignupPage && !isHomePage ? '72px' : '0', // Adjust the marginLeft based on the activeMenu state
+    transition: 'margin-left 0.3s ease', // Add transition for smooth animation
+  };
+
   return (
     <div className={currentMode === 'Dark' ? 'dark' : ''}>
       <BrowserRouter>
         <div className="flex relative dark:bg-main-dark-bg">
           <div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
-            <TooltipComponent
-              content="Settings"
-              position="Top"
-            >
+            <TooltipComponent content="Settings" position="Top">
               <button
                 type="button"
                 onClick={() => setThemeSettings(true)}
@@ -45,17 +46,17 @@ const App = () => {
               >
                 <FiSettings />
               </button>
-
             </TooltipComponent>
           </div>
-          
-          {!isLoginPage && !isSignupPage && !isHomePage && (
-            <div className={isLoginPage || isSignupPage ? "w-0 dark:bg-secondary-dark-bg" : "w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white "}>
+
+          {!isLoginPage && !isSignupPage && !isHomePage && activeMenu && (
+            <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white">
               <Sidebar />
             </div>
           )}
 
           <div
+            style={mainContentStyle}
             className={
               isLoginPage || isSignupPage || isHomePage
                 ? 'w-full min-h-screen flex-2 dark:bg-main-dark-bg bg-main-bg'
@@ -68,7 +69,7 @@ const App = () => {
               </div>
             )}
             <div>
-              {themeSettings && (<ThemeSettings />)}
+              {themeSettings && <ThemeSettings />}
 
               <Routes>
                 {/* dashboard  */}
@@ -115,9 +116,7 @@ const App = () => {
 
               </Routes>
             </div>
-            {!isLoginPage && !isSignupPage && !isHomePage &&(
-              <Footer />
-            )}
+            {!isLoginPage && !isSignupPage && !isHomePage && <Footer />}
           </div>
         </div>
       </BrowserRouter>
