@@ -30,10 +30,10 @@ const Sidebar = () => {
       {activeMenu && (
         <div className="ml-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10">
           <div className="flex justify-between items-center">
-            <Link to="/" onClick={handleCloseSideBar} className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900">
+            <div div className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900">
             <img src="logo192.png" alt="Logo" style={{ width: '30px', height: '30px' }} />
               <span style={{ marginLeft: '10px', verticalAlign: 'middle' }}>JBI</span>
-            </Link>
+            </div>
             <TooltipComponent content="Menu" position="BottomCenter">
               <button
                 type="button"

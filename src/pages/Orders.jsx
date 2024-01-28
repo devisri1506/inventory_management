@@ -98,7 +98,7 @@ const Orders = () => {
     setEditSlabRow(row);
     setOpenEditSlabModal(true);
   };
-
+  
   const handleDeleteSlab = (row) => {
     const newSlabData = selectedBlockSlabs.filter((slab) => slab.SlabNumber !== row.SlabNumber);
     setSelectedBlockSlabs(newSlabData);
@@ -144,12 +144,12 @@ const Orders = () => {
     <div className="md:w-10/12 sm:w-full mx-auto">
       <Paper className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
         <Header category="Page" title="Orders" />
-        <TableContainer className="overflow-x-auto">
-          <Table>
+        <TableContainer >
+          <Table className="min-w-full">
             <TableHead>
               <TableRow>
                 {ordersGrid.map((column, index) => (
-                  <TableCell key={index}>
+                  <TableCell key={index} className="p-2 sm:p-3">
                     <TableSortLabel
                       active={orderBy === column.field}
                       direction={orderBy === column.field ? order : 'asc'}
@@ -159,7 +159,7 @@ const Orders = () => {
                     </TableSortLabel>
                   </TableCell>
                 ))}
-                <TableCell>
+                <TableCell className="p-2 sm:p-3">
                   <IconButton aria-label="add" onClick={handleNewRow}>
                     <AddIcon />
                   </IconButton>
@@ -168,9 +168,9 @@ const Orders = () => {
             </TableHead>
             <TableBody>
               {data.map((row, rowIndex) => (
-                <TableRow key={rowIndex}>
+                <TableRow key={rowIndex} className="hover:bg-gray-100">
                   {ordersGrid.map((column, columnIndex) => (
-                    <TableCell key={columnIndex}>
+                    <TableCell key={columnIndex} className="p-2 sm:p-3">
                       {column.field === 'BlockNumber' ? (
                         <span onClick={() => handleBlockClick(row)} style={{ cursor: 'pointer' }}>
                           {row[column.field]}
@@ -180,7 +180,7 @@ const Orders = () => {
                       )}
                     </TableCell>
                   ))}
-                  <TableCell>
+                  <TableCell className="p-2 sm:p-3">
                     <IconButton aria-label="edit" onClick={() => handleEdit(row)}>
                       <EditIcon />
                     </IconButton>
@@ -194,7 +194,7 @@ const Orders = () => {
           </Table>
         </TableContainer>
 
-        <Dialog open={openEditModal} onClose={handleEditModalClose} className="sm:max-w-md">
+        <Dialog open={openEditModal} onClose={handleEditModalClose} className="text-center">
           <DialogTitle>Edit Order</DialogTitle>
           <DialogContent>
             {editRow &&
