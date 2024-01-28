@@ -141,10 +141,10 @@ const Orders = () => {
   };
 
   return (
-    <div>
+    <div className="md:w-10/12 sm:w-full mx-auto">
       <Paper className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
         <Header category="Page" title="Orders" />
-        <TableContainer>
+        <TableContainer className="overflow-x-auto">
           <Table>
             <TableHead>
               <TableRow>
@@ -194,7 +194,7 @@ const Orders = () => {
           </Table>
         </TableContainer>
 
-        <Dialog open={openEditModal} onClose={handleEditModalClose}>
+        <Dialog open={openEditModal} onClose={handleEditModalClose} className="sm:max-w-md">
           <DialogTitle>Edit Order</DialogTitle>
           <DialogContent>
             {editRow &&

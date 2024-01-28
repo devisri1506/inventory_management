@@ -28,7 +28,7 @@ const App = () => {
   }, []);
 
   const mainContentStyle = {
-    marginLeft: activeMenu && !isLoginPage && !isSignupPage && !isHomePage ? '72px' : '0', // Adjust the marginLeft based on the activeMenu state
+    marginLeft: activeMenu && !isLoginPage && !isSignupPage && !isHomePage ? '15%' : '0', // Adjust the marginLeft based on the activeMenu state
     transition: 'margin-left 0.3s ease', // Add transition for smooth animation
   };
 
