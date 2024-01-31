@@ -23,14 +23,14 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Header } from '../components';
-import { ordersGrid, slabData, slabsGrid, ordersData } from '../data/Block';
+import { blocksGrid, slabData, slabsGrid, blocksData} from '../data/Data';
 
-const Orders = () => {
+const Blocks = () => {
   const [editSlabRow, setEditSlabRow] = useState(null);
   const [openEditSlabModal, setOpenEditSlabModal] = useState(false);
   const [openNewSlabRowModal, setOpenNewSlabRowModal] = useState(false);
   const [newSlabRow, setNewSlabRow] = useState({});
-  const [data, setData] = useState(ordersData);
+  const [data, setData] = useState(blocksData);
   const [orderBy, setOrderBy] = useState('');
   const [order, setOrder] = useState('asc');
   const [editRow, setEditRow] = useState(null);
@@ -143,12 +143,12 @@ const Orders = () => {
   return (
     <div className="md:w-10/12 sm:w-full mx-auto">
       <Paper className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-        <Header category="Page" title="Orders" />
+        <Header category="Page" title="Blocks" />
         <TableContainer >
           <Table className="min-w-full">
             <TableHead>
               <TableRow>
-                {ordersGrid.map((column, index) => (
+                {blocksGrid.map((column, index) => (
                   <TableCell key={index} className="p-2 sm:p-3">
                     <TableSortLabel
                       active={orderBy === column.field}
@@ -169,7 +169,7 @@ const Orders = () => {
             <TableBody>
               {data.map((row, rowIndex) => (
                 <TableRow key={rowIndex} className="hover:bg-gray-100">
-                  {ordersGrid.map((column, columnIndex) => (
+                  {blocksGrid.map((column, columnIndex) => (
                     <TableCell key={columnIndex} className="p-2 sm:p-3">
                       {column.field === 'BlockNumber' ? (
                         <span onClick={() => handleBlockClick(row)} style={{ cursor: 'pointer' }}>
@@ -198,7 +198,7 @@ const Orders = () => {
           <DialogTitle>Edit Order</DialogTitle>
           <DialogContent>
             {editRow &&
-              ordersGrid.map((column, columnIndex) => (
+              blocksGrid.map((column, columnIndex) => (
                 <div key={columnIndex}>
                   {column.field === 'Status' ? (
                     <div>
@@ -236,7 +236,7 @@ const Orders = () => {
         <Dialog open={openNewRowModal} onClose={handleNewRowModalClose}>
           <DialogTitle>Create New Order</DialogTitle>
           <DialogContent>
-            {ordersGrid.map((column, columnIndex) => (
+            {blocksGrid.map((column, columnIndex) => (
               <div key={columnIndex}>
                 {column.field === 'Status' ? (
                   <div>
@@ -422,4 +422,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default Blocks;
