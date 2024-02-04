@@ -30,7 +30,10 @@ const Blocks = () => {
   const [openEditSlabModal, setOpenEditSlabModal] = useState(false);
   const [openNewSlabRowModal, setOpenNewSlabRowModal] = useState(false);
   const [newSlabRow, setNewSlabRow] = useState({});
-  const [data, setData] = useState(blocksData);
+  const [data, setData] = useState(blocksData.map(item => ({
+    ...item,
+    MeasurementCBM: item.Length * item.Width * item.Height,
+  })));
   const [orderBy, setOrderBy] = useState('');
   const [order, setOrder] = useState('asc');
   const [editRow, setEditRow] = useState(null);
@@ -39,6 +42,7 @@ const Blocks = () => {
   const [newRow, setNewRow] = useState({});
   const [selectedBlock, setSelectedBlock] = useState(null);
   const [selectedBlockSlabs, setSelectedBlockSlabs] = useState([]);
+  
 
   const handleSort = (property) => () => {
     const isAsc = orderBy === property && order === 'asc';
@@ -78,14 +82,25 @@ const Blocks = () => {
 
   const handleSaveEdit = () => {
     const updatedData = data.map((item) =>
-      item.BlockNumber === editRow.BlockNumber ? { ...item, ...editRow } : item
+      item.BlockNumber === editRow.BlockNumber
+        ? {
+            ...item,
+            ...editRow,
+            MeasurementCBM: editRow.Length * editRow.Width * editRow.Height,
+          }
+        : item
     );
     setData(updatedData);
     setOpenEditModal(false);
   };
 
   const handleSaveNewRow = () => {
-    const newData = [...data, newRow];
+    const newRowWithMeasurement = {
+      ...newRow,
+      MeasurementCBM: newRow.Length * newRow.Width * newRow.Height,
+    };
+
+    const newData = [...data, newRowWithMeasurement];
     setData(newData);
     setOpenNewRowModal(false);
   };
@@ -126,16 +141,28 @@ const Blocks = () => {
     setOpenNewSlabRowModal(false);
   };
 
-  const handleSaveEditSlab = () => {
+   const handleSaveEditSlab = () => {
     const updatedSlabData = selectedBlockSlabs.map((slab) =>
-      slab.SlabNumber === editSlabRow.SlabNumber ? { ...slab, ...editSlabRow } : slab
+      slab.SlabNumber === editSlabRow.SlabNumber
+        ? {
+            ...slab,
+            ...editSlabRow,
+            MeasurementSQFT: editSlabRow.Length * editSlabRow.Breadth,
+          }
+        : slab
     );
     setSelectedBlockSlabs(updatedSlabData);
     setOpenEditSlabModal(false);
   };
 
-  const handleSaveNewSlabRow = () => {
-    const newSlabData = [...selectedBlockSlabs, newSlabRow];
+
+ const handleSaveNewSlabRow = () => {
+    const newSlabRowWithMeasurement = {
+      ...newSlabRow,
+      MeasurementSQFT: newSlabRow.Length * newSlabRow.Breadth,
+    };
+
+    const newSlabData = [...selectedBlockSlabs, newSlabRowWithMeasurement];
     setSelectedBlockSlabs(newSlabData);
     setOpenNewSlabRowModal(false);
   };
@@ -288,22 +315,29 @@ const Blocks = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {selectedBlockSlabs.map((row, rowIndex) => (
-                            <TableRow key={rowIndex}>
-                              {slabsGrid.map((column, columnIndex) => (
-                                <TableCell key={columnIndex}>{row[column.field]}</TableCell>
-                              ))}
-                              <TableCell>
-                                <IconButton aria-label="edit" onClick={() => handleEditSlab(row)}>
-                                  <EditIcon />
-                                </IconButton>
-                                <IconButton aria-label="delete" onClick={() => handleDeleteSlab(row)}>
-                                  <DeleteIcon />
-                                </IconButton>
+                        {selectedBlockSlabs.map((row, rowIndex) => (
+                          <TableRow key={rowIndex}>
+                            {slabsGrid.map((column, columnIndex) => (
+                              <TableCell key={columnIndex}>
+                                {column.field === 'MeasurementSQFT' ? (
+                                  <span>{(row.Length * row.Breadth).toFixed(2)}</span>
+                                ) : (
+                                  row[column.field]
+                                )}
                               </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
+                            ))}
+                            <TableCell>
+                              <IconButton aria-label="edit" onClick={() => handleEditSlab(row)}>
+                                <EditIcon />
+                              </IconButton>
+                              <IconButton aria-label="delete" onClick={() => handleDeleteSlab(row)}>
+                                <DeleteIcon />
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+
                       </Table>
                     </TableContainer>
 

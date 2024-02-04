@@ -73,6 +73,16 @@ export const blocksGrid = [
         editType: 'numericedit',
         width: '150',
       },
+      {
+        field: 'MeasurementCBM',
+        headerText: 'Measurement (cbm)',
+        textAlign: 'Center',
+        editType: 'numericedit',
+        width: '150',
+        template: (props) => (
+          <span>{props.Length * props.Width * props.Height}</span>
+        ),
+      },
     {
       headerText: 'Status',
       template: gridOrderStatus,
@@ -95,6 +105,16 @@ export const blocksGrid = [
       
       { field: 'Length', headerText: 'Length', format: 'C2', textAlign: 'Center', editType: 'numericedit', width: '150' },
       { field: 'Breadth', headerText: 'Breadth', textAlign: 'Center', editType: 'numericedit', width: '150' },
+      {
+        field: 'MeasurementSQFT',
+        headerText: 'Measurement (sqft)',
+        textAlign: 'Center',
+        editType: 'numericedit',
+        width: '150',
+        template: (props) => (
+          <span>{props.Length * props.Breadth}</span>
+        ),
+      },
       {
         headerText: 'Type',
         template: gridOrderStatus,
