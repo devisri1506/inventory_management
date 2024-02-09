@@ -21,14 +21,6 @@ export const gridOrderStatus = (props) => (
 );
 export const blocksGrid = [
   {
-    field: 'Date',
-    headerText: 'Date',
-    format: 'C2',
-    textAlign: 'Center',
-    editType: 'numericedit',
-    width: '150',
-  },
-  {
     field: 'BlockNumber',
     headerText: 'Block Number',
     width: '150',
@@ -78,7 +70,7 @@ export const blocksGrid = [
         headerText: 'Measurement (cbm)',
         textAlign: 'Center',
         editType: 'numericedit',
-        width: '150',
+        width: '100',
         template: (props) => (
           <span>{props.Length * props.Width * props.Height}</span>
         ),
@@ -91,11 +83,20 @@ export const blocksGrid = [
       textAlign: 'Center',
       width: '120',
     },
+    {
+      field: 'Date',
+      headerText: 'Date',
+      format: 'C2',
+      textAlign: 'Center',
+      editType: 'numericedit',
+    
+    },
+    
     
   ];
 
     export const slabsGrid = [
-      { field: 'Date', headerText: 'Date', width: '150', textAlign: 'Center' },
+     
       {
         field: 'SlabNumber',
         headerText: 'Slab Number',
@@ -131,6 +132,7 @@ export const blocksGrid = [
         textAlign: 'Center',
         width: '120',
       },
+      { field: 'Date', headerText: 'Date', width: '150', textAlign: 'Center' },
     ];
     export const slabData=
     [
@@ -157,7 +159,7 @@ export const blocksGrid = [
         Length:1,
         Width:1,
         Height:1,
-        Status:"Pending"
+        Status:"Cutting"
       },
      
  ]

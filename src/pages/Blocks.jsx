@@ -171,6 +171,11 @@ const Blocks = () => {
     <div className="md:w-10/12 sm:w-full mx-auto">
       <Paper className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
         <Header category="Page" title="Blocks" />
+        <div className="text-left mt-4">
+                      <Button variant="contained" onClick={handleNewRow}>
+                        Add Block
+                      </Button>
+        </div>
         <TableContainer >
           <Table className="min-w-full">
             <TableHead>
@@ -186,10 +191,8 @@ const Blocks = () => {
                     </TableSortLabel>
                   </TableCell>
                 ))}
-                <TableCell className="p-2 sm:p-3">
-                  <IconButton aria-label="add" onClick={handleNewRow}>
-                    <AddIcon />
-                  </IconButton>
+                <TableCell className="p-2 sm:p-3" colSpan={2}>
+                  Actions
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -211,10 +214,13 @@ const Blocks = () => {
                     <IconButton aria-label="edit" onClick={() => handleEdit(row)}>
                       <EditIcon />
                     </IconButton>
+                    
+                  </TableCell>
+                  <TableCell>
                     <IconButton aria-label="delete" onClick={() => handleDelete(row)}>
                       <DeleteIcon />
                     </IconButton>
-                  </TableCell>
+                    </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -261,7 +267,9 @@ const Blocks = () => {
 
       {/* New Row Modal */}
         <Dialog open={openNewRowModal} onClose={handleNewRowModalClose}>
-          <DialogTitle>Create New Order</DialogTitle>
+          <DialogTitle>Create New Block
+            
+          </DialogTitle>
           <DialogContent>
             {blocksGrid.map((column, columnIndex) => (
               <div key={columnIndex}>
@@ -298,7 +306,7 @@ const Blocks = () => {
         </Dialog>
       </Paper>
         <Dialog open={!!selectedBlock} onClose={handleCardClose}>
-          <DialogTitle>Block Details</DialogTitle>
+          <DialogTitle>Slab Details</DialogTitle>
           <DialogContent>
             {selectedBlock && (
               <Card>
@@ -311,7 +319,7 @@ const Blocks = () => {
                             {slabsGrid.map((column, index) => (
                               <TableCell key={index}>{column.headerText}</TableCell>
                             ))}
-                            <TableCell>Actions</TableCell>
+                            <TableCell colSpan={2}>Actions</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -330,10 +338,11 @@ const Blocks = () => {
                               <IconButton aria-label="edit" onClick={() => handleEditSlab(row)}>
                                 <EditIcon />
                               </IconButton>
-                              <IconButton aria-label="delete" onClick={() => handleDeleteSlab(row)}>
-                                <DeleteIcon />
-                              </IconButton>
+                              
                             </TableCell>
+                            <TableCell><IconButton aria-label="delete" onClick={() => handleDeleteSlab(row)}>
+                                <DeleteIcon />
+                              </IconButton></TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
