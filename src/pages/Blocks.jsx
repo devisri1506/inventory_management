@@ -24,9 +24,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Header } from '../components';
 import { blocksGrid, slabData, slabsGrid, blocksData} from '../data/Data';
+import { WidthNormal } from '@mui/icons-material';
 
 const Blocks = () => {
-  const [editSlabRow, setEditSlabRow] = useState(null);
+  const [editSlabRow, setEditSlabRow] = useState({});
   const [openEditSlabModal, setOpenEditSlabModal] = useState(false);
   const [openNewSlabRowModal, setOpenNewSlabRowModal] = useState(false);
   const [newSlabRow, setNewSlabRow] = useState({});
@@ -168,7 +169,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
     setOpenNewSlabRowModal(false);
   };
 
-   const handleSaveEditSlab = () => {
+  const handleSaveEditSlab = () => {
     const updatedSlabData = selectedBlockSlabs.map((slab) =>
       slab.SlabNumber === editSlabRow.SlabNumber
         ? {
@@ -181,30 +182,32 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
     setSelectedBlockSlabs(updatedSlabData);
     setOpenEditSlabModal(false);
   };
+  
 
 
- const handleSaveNewSlabRow = () => {
-  // Check if all mandatory fields are filled
-  if (
-    !newSlabRow.Date ||
-    !newSlabRow.SlabNumber ||
-    !newSlabRow.BlockNumber ||
-    !newSlabRow.Length ||
-    !newSlabRow.Breadth
-  ) {
-    alert('Please fill all mandatory fields.');
-    return;
-  }
-
-  const newSlabRowWithMeasurement = {
-    ...newSlabRow,
-    MeasurementSQFT: newSlabRow.Length * newSlabRow.Breadth,
+  const handleSaveNewSlabRow = () => {
+    // Check if all mandatory fields are filled
+    if (
+      !newSlabRow.Date ||
+      !newSlabRow.SlabNumber ||
+      !newSlabRow.BlockNumber ||
+      !newSlabRow.Length ||
+      !newSlabRow.Breadth
+    ) {
+      alert('Please fill all mandatory fields.');
+      return;
+    }
+  
+    const newSlabRowWithMeasurement = {
+      ...newSlabRow,
+      MeasurementSQFT: newSlabRow.Length * newSlabRow.Breadth,
+    };
+  
+    const newSlabData = [...selectedBlockSlabs, newSlabRowWithMeasurement];
+    setSelectedBlockSlabs(newSlabData);
+    setOpenNewSlabRowModal(false);
   };
-
-  const newSlabData = [...selectedBlockSlabs, newSlabRowWithMeasurement];
-  setSelectedBlockSlabs(newSlabData);
-  setOpenNewSlabRowModal(false);
-};
+  
 
   
 
@@ -213,7 +216,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
       <Paper className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
         <Header category="Page" title="Blocks" />
         <div className="text-left mt-4">
-                      <Button variant="contained" onClick={handleNewRow}>
+                      <Button variant="contained" onClick={handleNewRow} style={{backgroundColor:'black',borderRadius:"12px"}}>
                         Add Block
                       </Button>
         </div>
@@ -241,9 +244,9 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
               {data.map((row, rowIndex) => (
                 <TableRow key={rowIndex} className="hover:bg-gray-100">
                   {blocksGrid.map((column, columnIndex) => (
-                    <TableCell key={columnIndex} className="p-2 sm:p-3">
+                    <TableCell key={columnIndex} className="p-2 sm:p-3"onClick={() => handleBlockClick(row)}>
                       {column.field === 'BlockNumber' ? (
-                        <span onClick={() => handleBlockClick(row)} style={{ cursor: 'pointer' }}>
+                        <span style={{ cursor: 'pointer' }}>
                           {row[column.field]}
                         </span>
                       ) : (
@@ -268,7 +271,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
           </Table>
         </TableContainer>
 
-        <Dialog open={openEditModal} onClose={handleEditModalClose} className="text-center " >
+        <Dialog open={openEditModal} onClose={handleEditModalClose}  fullWidth >
           <DialogTitle>Edit Block</DialogTitle>
           <DialogContent>
             {editRow &&
@@ -299,7 +302,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
                 </div>
               ))}
             <div className="text-center mt-4">
-            <Button variant="contained" onClick={handleSaveEdit}>
+            <Button variant="contained" onClick={handleSaveEdit} style={{backgroundColor:'black',borderRadius:"12px"}}>
               Save
             </Button>
             </div>
@@ -307,7 +310,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
         </Dialog>
 
       {/* New Row Modal */}
-        <Dialog open={openNewRowModal} onClose={handleNewRowModalClose}>
+        <Dialog open={openNewRowModal} onClose={handleNewRowModalClose} fullWidth>
           <DialogTitle>Create New Block
 
           </DialogTitle>
@@ -322,8 +325,8 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
                       onChange={(e) => setNewRow({ ...newRow, Status: e.target.value })}
                       fullWidth
                     >
-                      <MenuItem value="Pending">Pending</MenuItem>
-                      <MenuItem value="In Progress">In Progress</MenuItem>
+                      <MenuItem value="Cutting">Cutting</MenuItem>
+                      <MenuItem value="Polishing">Polishing</MenuItem>
                       <MenuItem value="Completed">Completed</MenuItem>
                     </Select>
                   </div>
@@ -339,14 +342,14 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
               </div>
             ))}
             <div className="text-center mt-4">
-            <Button variant="contained" onClick={handleSaveNewRow}>
+            <Button variant="contained" onClick={handleSaveNewRow} style={{backgroundColor:'black',borderRadius:"12px"}} >
               Save
             </Button>
             </div>
           </DialogContent>
         </Dialog>
       </Paper>
-        <Dialog open={!!selectedBlock} onClose={handleCardClose}>
+        <Dialog open={!!selectedBlock} onClose={handleCardClose} maxWidth="xl" fullWidth>
           <DialogTitle>Slab Details</DialogTitle>
           <DialogContent>
             {selectedBlock && (
@@ -401,8 +404,8 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
 
 
                     <div className="text-center mt-4">
-                      <Button variant="contained" onClick={handleNewSlabRow}>
-                        Add Row
+                      <Button variant="contained" onClick={handleNewSlabRow} style={{backgroundColor:'black', borderRadius:"12px"}}>
+                        Add Slab
                       </Button>
                     </div>
                   </div>
@@ -412,103 +415,135 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
           </DialogContent>
         </Dialog>
 
-        <Dialog open={openEditSlabModal} onClose={handleEditSlabModalClose}>
+        <Dialog open={openEditSlabModal} onClose={handleEditSlabModalClose} fullWidth> 
           <DialogTitle>Edit Slab</DialogTitle>
           <DialogContent>
-            {editSlabRow &&
-              slabsGrid.map((column, columnIndex) => (
-                <div key={columnIndex}>
-                  {column.field === 'Type' || column.field === 'Status' ? (
-                    <div>
-                      <label>{column.headerText}:</label>
-                      <Select
-                        value={editSlabRow[column.field]}
-                        onChange={(e) =>
-                          setEditSlabRow({ ...editSlabRow, [column.field]: e.target.value })
-                        }
-                        fullWidth
-                      >
-                        {column.field === 'Type' ? (
-                          <>
-                            <MenuItem value="Fresh">Fresh</MenuItem>
-                            <MenuItem value="Defect">Defect</MenuItem>
-                            <MenuItem value="Light Defect">Light Defect</MenuItem>
-                          </>
-                        ) : (
-                          <>
-                            <MenuItem value="Sold">Sold</MenuItem>
-                            <MenuItem value="In Sales">In Sales</MenuItem>
-                          </>
-                        )}
-                      </Select>
-                    </div>
-                  ) : (
-                    <TextField
-                      label={column.headerText}
-                      value={editSlabRow[column.field]}
-                      onChange={(e) =>
-                        setEditSlabRow({ ...editSlabRow, [column.field]: e.target.value })
-                      }
-                      fullWidth
-                      margin="normal"
-                    />
-                  )}
-                </div>
-              ))}
+            <TextField
+              label="Date"
+              value={editSlabRow.Date || ''}
+              onChange={(e) => setEditSlabRow({ ...editSlabRow, Date: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Slab Number"
+              value={editSlabRow.SlabNumber || ''}
+              onChange={(e) => setEditSlabRow({ ...editSlabRow, SlabNumber: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+          
 
+            <TextField
+              label="Length"
+              value={editSlabRow.Length}
+              onChange={(e) => setEditSlabRow({ ...editSlabRow, Length: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Breadth"
+              value={editSlabRow.Breadth}
+              onChange={(e) => setEditSlabRow({ ...editSlabRow, Breadth: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+           <label>Type</label>
+            <Select
+              
+              value={editSlabRow.Type || 'Fresh'}
+              onChange={(e) => setEditSlabRow({ ...editSlabRow, Type: e.target.value })}
+              fullWidth
+            >
+              <MenuItem value="Fresh">Fresh</MenuItem>
+              <MenuItem value="Defect">Defect</MenuItem>
+              <MenuItem value="LightDefect">Light Defect</MenuItem>
+            </Select>
+            <label htmlFor="">Status</label>
+            <Select
+              label="Status"
+              value={editSlabRow.Status || 'Pending'}
+              onChange={(e) => setEditSlabRow({ ...editSlabRow, Status: e.target.value })}
+              fullWidth
+            >
+              <MenuItem value="Sold">Sold</MenuItem>
+              <MenuItem value="InSales">In Sales</MenuItem>
+              
+            </Select>
             <div className="text-center mt-4">
-              <Button variant="contained" onClick={handleSaveEditSlab}>
+              <Button variant="contained" onClick={handleSaveEditSlab} style={{backgroundColor:'black',borderRadius:"12px"}}>
                 Save
               </Button>
             </div>
           </DialogContent>
         </Dialog>
-        <Dialog open={openNewSlabRowModal} onClose={handleNewSlabRowModalClose}>
-    <DialogTitle>Create New Slab</DialogTitle>
-    <DialogContent>
-      {slabsGrid.map((column, columnIndex) => (
-        <div key={columnIndex}>
-          {column.field === 'Type' || column.field === 'Status' ? (
-            <div>
-              <label>{column.headerText}:</label>
-              <Select
-                value={newSlabRow[column.field] || ''}
-                onChange={(e) => setNewSlabRow({ ...newSlabRow, [column.field]: e.target.value })}
-                fullWidth
-              >
-                {column.field === 'Type' ? (
-                  <>
-                    <MenuItem value="Fresh">Fresh</MenuItem>
-                    <MenuItem value="Defect">Defect</MenuItem>
-                    <MenuItem value="Light Defect">Light Defect</MenuItem>
-                  </>
-                ) : (
-                  <>
-                    <MenuItem value="Sold">Sold</MenuItem>
-                    <MenuItem value="In Sales">In Sales</MenuItem>
-                   
-                  </>
-                )}
-              </Select>
-            </div>
-          ) : (
+        <Dialog open={openNewSlabRowModal} onClose={handleNewSlabRowModalClose} fullWidth>
+          <DialogTitle>Create New Slab</DialogTitle>
+          <DialogContent>
             <TextField
-              label={column.headerText}
-              value={newSlabRow[column.field] || ''}
-              onChange={(e) => setNewSlabRow({ ...newSlabRow, [column.field]: e.target.value })}
+              label="Date"
+              value={newSlabRow.Date || ''}
+              onChange={(e) => setNewSlabRow({ ...newSlabRow, Date: e.target.value })}
               fullWidth
               margin="normal"
             />
-          )}
-        </div>
-      ))}
-     <div className="text-center mt-4">
-     <Button variant="contained" onClick={handleSaveNewSlabRow}>
-        Save
-      </Button>
-     </div>
-    </DialogContent>
-  </Dialog>
+            <TextField
+              label="Slab Number"
+              value={newSlabRow.SlabNumber || ''}
+              onChange={(e) => setNewSlabRow({ ...newSlabRow, SlabNumber: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Block Number"
+              value={newSlabRow.BlockNumber}
+              onChange={(e) => setNewSlabRow({ ...newSlabRow, BlockNumber: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Length"
+              value={newSlabRow.Length}
+              onChange={(e) => setNewSlabRow({ ...newSlabRow, Length: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Breadth"
+              value={newSlabRow.Breadth}
+              onChange={(e) => setNewSlabRow({ ...newSlabRow, Breadth: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+           <label>Type</label>
+            <Select
+              
+              value={newSlabRow.Type || 'Fresh'}
+              onChange={(e) => setNewSlabRow({ ...newSlabRow, Type: e.target.value })}
+              fullWidth
+            >
+              <MenuItem value="Fresh">Fresh</MenuItem>
+              <MenuItem value="Defect">Defect</MenuItem>
+              <MenuItem value="LightDefect">Light Defect</MenuItem>
+            </Select>
+            <label htmlFor="">Status</label>
+            <Select
+              label="Status"
+              value={newSlabRow.Status || 'Pending'}
+              onChange={(e) => setNewSlabRow({ ...newSlabRow, Status: e.target.value })}
+              fullWidth
+            >
+              <MenuItem value="Sold">Sold</MenuItem>
+              <MenuItem value="InSales">In Sales</MenuItem>
+              
+            </Select>
+            <div className="text-center mt-4">
+              <Button variant="contained" onClick={handleSaveNewSlabRow} style={{backgroundColor:'black',borderRadius:"12px"}}>
+                Save
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
                     
     </div>
   );
