@@ -35,6 +35,9 @@ const Blocks = () => {
     MeasurementCBM: item.Length * item.Width * item.Height,
   })));
   const [orderBy, setOrderBy] = useState('');
+  const [slabsOrderBy, setSlabsOrderBy] = useState('');
+const [slabsOrder, setSlabsOrder] = useState('asc');
+
   const [order, setOrder] = useState('asc');
   const [editRow, setEditRow] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -44,10 +47,28 @@ const Blocks = () => {
   const [selectedBlockSlabs, setSelectedBlockSlabs] = useState([]);
   
 
-  const handleSort = (property) => () => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+  const handleSort = (property, isBlocksTable = true) => () => {
+    if (isBlocksTable) {
+      const isAsc = orderBy === property && order === 'asc';
+      const sortedData = [...data].sort((a, b) => {
+        if (a[property] < b[property]) return isAsc ? -1 : 1;
+        if (a[property] > b[property]) return isAsc ? 1 : -1;
+        return 0;
+      });
+      setData(sortedData);
+      setOrder(isAsc ? 'desc' : 'asc');
+      setOrderBy(property);
+    } else {
+      const isAsc = slabsOrderBy === property && slabsOrder === 'asc';
+      const sortedSlabs = [...selectedBlockSlabs].sort((a, b) => {
+        if (a[property] < b[property]) return isAsc ? -1 : 1;
+        if (a[property] > b[property]) return isAsc ? 1 : -1;
+        return 0;
+      });
+      setSelectedBlockSlabs(sortedSlabs);
+      setSlabsOrder(isAsc ? 'desc' : 'asc');
+      setSlabsOrderBy(property);
+    }
   };
 
   const handleEdit = (row) => {
@@ -95,11 +116,17 @@ const Blocks = () => {
   };
 
   const handleSaveNewRow = () => {
+    // Check if all mandatory fields are filled
+    if (!newRow.BlockNumber || !newRow.Length || !newRow.Width || !newRow.Height) {
+      alert('Please fill all mandatory fields.');
+      return;
+    }
+  
     const newRowWithMeasurement = {
       ...newRow,
       MeasurementCBM: newRow.Length * newRow.Width * newRow.Height,
     };
-
+  
     const newData = [...data, newRowWithMeasurement];
     setData(newData);
     setOpenNewRowModal(false);
@@ -157,15 +184,29 @@ const Blocks = () => {
 
 
  const handleSaveNewSlabRow = () => {
-    const newSlabRowWithMeasurement = {
-      ...newSlabRow,
-      MeasurementSQFT: newSlabRow.Length * newSlabRow.Breadth,
-    };
+  // Check if all mandatory fields are filled
+  if (
+    !newSlabRow.Date ||
+    !newSlabRow.SlabNumber ||
+    !newSlabRow.BlockNumber ||
+    !newSlabRow.Length ||
+    !newSlabRow.Breadth
+  ) {
+    alert('Please fill all mandatory fields.');
+    return;
+  }
 
-    const newSlabData = [...selectedBlockSlabs, newSlabRowWithMeasurement];
-    setSelectedBlockSlabs(newSlabData);
-    setOpenNewSlabRowModal(false);
+  const newSlabRowWithMeasurement = {
+    ...newSlabRow,
+    MeasurementSQFT: newSlabRow.Length * newSlabRow.Breadth,
   };
+
+  const newSlabData = [...selectedBlockSlabs, newSlabRowWithMeasurement];
+  setSelectedBlockSlabs(newSlabData);
+  setOpenNewSlabRowModal(false);
+};
+
+  
 
   return (
     <div className="md:w-10/12 sm:w-full mx-auto">
@@ -227,8 +268,8 @@ const Blocks = () => {
           </Table>
         </TableContainer>
 
-        <Dialog open={openEditModal} onClose={handleEditModalClose} className="text-center">
-          <DialogTitle>Edit Order</DialogTitle>
+        <Dialog open={openEditModal} onClose={handleEditModalClose} className="text-center " >
+          <DialogTitle>Edit Block</DialogTitle>
           <DialogContent>
             {editRow &&
               blocksGrid.map((column, columnIndex) => (
@@ -268,7 +309,7 @@ const Blocks = () => {
       {/* New Row Modal */}
         <Dialog open={openNewRowModal} onClose={handleNewRowModalClose}>
           <DialogTitle>Create New Block
-            
+
           </DialogTitle>
           <DialogContent>
             {blocksGrid.map((column, columnIndex) => (
@@ -317,7 +358,15 @@ const Blocks = () => {
                         <TableHead>
                           <TableRow>
                             {slabsGrid.map((column, index) => (
-                              <TableCell key={index}>{column.headerText}</TableCell>
+                             <TableCell key={index} className="p-2 sm:p-3">
+                             <TableSortLabel
+                               active={slabsOrderBy === column.field}
+                               direction={slabsOrderBy === column.field ? slabsOrder : 'asc'}
+                               onClick={handleSort(column.field,false)}
+                             >
+                               {column.headerText}
+                             </TableSortLabel>
+                           </TableCell>
                             ))}
                             <TableCell colSpan={2}>Actions</TableCell>
                           </TableRow>

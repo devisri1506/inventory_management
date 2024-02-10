@@ -94,7 +94,85 @@ export const blocksGrid = [
     
     
   ];
+  export const ordersGrid = [
+    {
+      field: 'OrderId',
+      headerText: 'Order ID',
+      width: '150',
+      textAlign: 'Center',
+    },
+    {
+      field: 'CustomerId',
+      headerText: 'Customer ID',
+      width: '150',
+      textAlign: 'Center'
 
+    },
+      { field: 'CustomerName',
+        headerText: 'Customer Name',
+        width: '150',
+        textAlign: 'Center',
+      },
+      {
+        field: 'CustomerPhoneNumber',
+        headerText: 'Customer Phone Number',
+        format: 'C2',
+        textAlign: 'Center',
+        editType: 'numericedit',
+        width: '150',
+      },
+      
+      {
+          field: 'Fresh',
+          headerText: 'Fresh',
+  
+          textAlign: 'Center',
+          editType: 'numericedit',
+          width: '150',
+        },
+        {
+          field: 'LightDefect',
+          headerText: 'Light Defect',
+          format: 'C2',
+          textAlign: 'Center',
+          editType: 'numericedit',
+          width: '150',
+        },
+        {
+          field: 'Defect',
+          headerText: 'Defect',
+          textAlign: 'Center',
+          editType: 'numericedit',
+          width: '100',
+          
+        },
+     
+      {
+        field: 'Date',
+        headerText: 'Date',
+        format: 'C2',
+        textAlign: 'Center',
+        editType: 'numericedit',
+      
+      },
+      
+      
+    ];
+    export const ordersData=
+ [
+    {
+      Date:"01-06-2023",
+      OrderId:1,
+      CustomerId:1,
+      CustomerName:1,
+      CustomerPhoneNumber:1,
+        Fresh:1,
+        LightDefect:1,
+        Defect:1,
+      },
+     
+ ]
+ 
     export const slabsGrid = [
      
       {
@@ -200,6 +278,10 @@ export const blocksGrid = [
           icon: <AiOutlineBlock />,
         },
         {
+          name: 'Orders',
+          icon: <AiOutlineShoppingCart />,
+        },
+        {
           name: 'employees',
           icon: <IoMdContacts />,
         },
@@ -212,22 +294,12 @@ export const blocksGrid = [
     {
       title: 'Apps',
       links: [
-        {
-          name: 'calendar',
-          icon: <AiOutlineCalendar />,
-        },
+      
         {
           name: 'kanban',
           icon: <BsKanban />,
         },
-        {
-          name: 'editor',
-          icon: <FiEdit />,
-        },
-        {
-          name: 'color-picker',
-          icon: <BiColorFill />,
-        },
+        
       ],
     },
     {
