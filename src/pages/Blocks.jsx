@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import {
   Paper,
   Table,
@@ -40,7 +43,7 @@ const Blocks = () => {
 const [slabsOrder, setSlabsOrder] = useState('asc');
 
   const [order, setOrder] = useState('asc');
-  const [editRow, setEditRow] = useState(null);
+  const [editRow, setEditRow] = useState({});
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openNewRowModal, setOpenNewRowModal] = useState(false);
   const [newRow, setNewRow] = useState({});
@@ -80,6 +83,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
   const handleDelete = (row) => {
     const newData = data.filter((item) => item.BlockNumber !== row.BlockNumber);
     setData(newData);
+    toast.success("Block deleted Successfully");
   };
 
   const handleNewRow = () => {
@@ -114,12 +118,26 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
     );
     setData(updatedData);
     setOpenEditModal(false);
+    toast.success('Block edited successfully')
   };
 
   const handleSaveNewRow = () => {
     // Check if all mandatory fields are filled
     if (!newRow.BlockNumber || !newRow.Length || !newRow.Width || !newRow.Height) {
-      alert('Please fill all mandatory fields.');
+      toast.error('Please fill all mandatory fields.',{
+        position: "top-right",
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+
+
+      });
+
+      
       return;
     }
   
@@ -131,6 +149,19 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
     const newData = [...data, newRowWithMeasurement];
     setData(newData);
     setOpenNewRowModal(false);
+    toast.success('New Block Created successfully'),{
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      }
+    
+  ;
+    return;
   };
 
   const handleCardClose = () => {
@@ -140,11 +171,13 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
   const handleEditSlab = (row) => {
     setEditSlabRow(row);
     setOpenEditSlabModal(true);
+
   };
   
   const handleDeleteSlab = (row) => {
     const newSlabData = selectedBlockSlabs.filter((slab) => slab.SlabNumber !== row.SlabNumber);
     setSelectedBlockSlabs(newSlabData);
+    toast.success("Slab deleted successfully");
   };
 
   const handleNewSlabRow = () => {
@@ -181,6 +214,9 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
     );
     setSelectedBlockSlabs(updatedSlabData);
     setOpenEditSlabModal(false);
+    toast.success("Slab edited successfully")
+      
+      
   };
   
 
@@ -194,7 +230,18 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
       !newSlabRow.Length ||
       !newSlabRow.Breadth
     ) {
-      alert('Please fill all mandatory fields.');
+      toast.error('Please fill all mandatory fields.',{
+        position: "top-right",
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+
+
+      });
       return;
     }
   
@@ -206,14 +253,15 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
     const newSlabData = [...selectedBlockSlabs, newSlabRowWithMeasurement];
     setSelectedBlockSlabs(newSlabData);
     setOpenNewSlabRowModal(false);
+    toast.success('New Slab Created successfully');
   };
   
 
   
 
   return (
-    <div className="md:w-10/12 sm:w-full mx-auto">
-      <Paper className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
+    <div className="md:w-10/12 sm:w-full mx-auto"> 
+      <Paper className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl" >
         <Header category="Page" title="Blocks" />
         <div className="text-left mt-4">
                       <Button variant="contained" onClick={handleNewRow} style={{backgroundColor:'black',borderRadius:"12px"}}>
@@ -221,7 +269,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
                       </Button>
         </div>
         <TableContainer >
-          <Table className="min-w-full">
+          <Table className="min-w-full" >
             <TableHead>
               <TableRow>
                 {blocksGrid.map((column, index) => (
@@ -274,37 +322,70 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
         <Dialog open={openEditModal} onClose={handleEditModalClose}  fullWidth >
           <DialogTitle>Edit Block</DialogTitle>
           <DialogContent>
-            {editRow &&
-              blocksGrid.map((column, columnIndex) => (
-                <div key={columnIndex}>
-                  {column.field === 'Status' ? (
-                    <div>
-                      <label>Status:</label>
-                      <Select
-                        value={editRow.Status}
-                        onChange={(e) => setEditRow({ ...editRow, Status: e.target.value })}
-                        fullWidth
-                      >
-                        <MenuItem value="Cutting">Cutting</MenuItem>
-                        <MenuItem value="Polishing">Polishing</MenuItem>
-                        <MenuItem value="Sales">Sales</MenuItem>
-                      </Select>
-                    </div>
-                  ) : (
-                    <TextField
-                      label={column.headerText}
-                      value={editRow[column.field]}
-                      onChange={(e) => setEditRow({ ...editRow, [column.field]: e.target.value })}
-                      fullWidth
-                      margin="normal"
-                    />
-                  )}
-                </div>
-              ))}
+            <TextField
+              label="Date"
+              type='date'
+              value={editRow.Date || ''}
+              onChange={(e) => setEditRow({ ...editRow, Date: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Block Number"
+              value={editRow.BlockNumber || ''}
+              onChange={(e) => setEditRow({ ...editRow, BlockNumber: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+          <TextField
+              label="Quarry Number"
+              value={editRow.QuarryNumber || ''}
+              onChange={(e) => setEditRow({ ...editRow, QuarryNumber: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Length"
+              type="number"
+              value={editRow.Length ||'' }
+              onChange={(e) => setEditRow({ ...editRow, Length: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Width"
+              type="number"
+              value={editRow.Width ||''}
+              onChange={(e) => setEditRow({ ...editRow, Width: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Height"
+              type="number"
+              value={editRow.Height || ''}
+              onChange={(e) => setEditRow({ ...editRow, Height: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+           
+            <label htmlFor="">Status</label>
+            <Select
+              label="Status"
+              value={editRow.Status || 'Pending'}
+              onChange={(e) => setEditRow({ ...editRow, Status: e.target.value })}
+              fullWidth
+            >
+              <MenuItem value="Cutting">Cutting</MenuItem>
+              <MenuItem value="Polishing">Polishing</MenuItem>
+              <MenuItem value="Sales">Sales</MenuItem>
+              
+            </Select>
             <div className="text-center mt-4">
-            <Button variant="contained" onClick={handleSaveEdit} style={{backgroundColor:'black',borderRadius:"12px"}}>
-              Save
-            </Button>
+              <Button variant="contained" onClick={handleSaveEdit} style={{backgroundColor:'black',borderRadius:"12px"}}>
+                Save
+              </Button>
+            
             </div>
           </DialogContent>
         </Dialog>
@@ -315,36 +396,70 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
 
           </DialogTitle>
           <DialogContent>
-            {blocksGrid.map((column, columnIndex) => (
-              <div key={columnIndex}>
-                {column.field === 'Status' ? (
-                  <div>
-                    <label>Status:</label>
-                    <Select
-                      value={newRow.Status || ''}
-                      onChange={(e) => setNewRow({ ...newRow, Status: e.target.value })}
-                      fullWidth
-                    >
-                      <MenuItem value="Cutting">Cutting</MenuItem>
-                      <MenuItem value="Polishing">Polishing</MenuItem>
-                      <MenuItem value="Completed">Completed</MenuItem>
-                    </Select>
-                  </div>
-                ) : (
-                  <TextField
-                    label={column.headerText}
-                    value={newRow[column.field] || ''}
-                    onChange={(e) => setNewRow({ ...newRow, [column.field]: e.target.value })}
-                    fullWidth
-                    margin="normal"
-                  />
-                )}
-              </div>
-            ))}
+            <TextField
+              label="Date"
+              type='date'
+              value={newRow.Date || ''}
+              onChange={(e) => setNewRow({ ...newRow, Date: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Block Number"
+              value={newRow.BlockNumber || ''}
+              onChange={(e) => setNewRow({ ...newRow, BlockNumber: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+          <TextField
+              label="Quarry Number"
+              value={newRow.QuarryNumber || ''}
+              onChange={(e) => setNewRow({ ...newRow, QuarryNumber: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Length"
+              type="number"
+              value={newRow.Length ||'' }
+              onChange={(e) => setNewRow({ ...newRow, Length: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Width"
+              type="number"
+              value={newRow.Width ||''}
+              onChange={(e) => setNewRow({ ...newRow, Width: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Height"
+              type="number"
+              value={newRow.Height || ''}
+              onChange={(e) => setNewRow({ ...newRow, Height: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+           
+            <label htmlFor="">Status</label>
+            <Select
+              label="Status"
+              value={newRow.Status || 'Pending'}
+              onChange={(e) => setNewRow({ ...newRow, Status: e.target.value })}
+              fullWidth
+            >
+              <MenuItem value="Cutting">Cutting</MenuItem>
+              <MenuItem value="Polishing">Polishing</MenuItem>
+              <MenuItem value="Sales">Sales</MenuItem>
+              
+            </Select>
             <div className="text-center mt-4">
-            <Button variant="contained" onClick={handleSaveNewRow} style={{backgroundColor:'black',borderRadius:"12px"}} >
-              Save
-            </Button>
+              <Button variant="contained" onClick={handleSaveNewRow} style={{backgroundColor:'black',borderRadius:"12px"}}>
+                Save
+              </Button>
+            
             </div>
           </DialogContent>
         </Dialog>
@@ -401,7 +516,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
 
                       </Table>
                     </TableContainer>
-
+                    
 
                     <div className="text-center mt-4">
                       <Button variant="contained" onClick={handleNewSlabRow} style={{backgroundColor:'black', borderRadius:"12px"}}>
@@ -420,6 +535,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
           <DialogContent>
             <TextField
               label="Date"
+              type="date"
               value={editSlabRow.Date || ''}
               onChange={(e) => setEditSlabRow({ ...editSlabRow, Date: e.target.value })}
               fullWidth
@@ -436,6 +552,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
 
             <TextField
               label="Length"
+              type="number"
               value={editSlabRow.Length}
               onChange={(e) => setEditSlabRow({ ...editSlabRow, Length: e.target.value })}
               fullWidth
@@ -443,6 +560,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
             />
             <TextField
               label="Breadth"
+              type="number"
               value={editSlabRow.Breadth}
               onChange={(e) => setEditSlabRow({ ...editSlabRow, Breadth: e.target.value })}
               fullWidth
@@ -474,6 +592,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
               <Button variant="contained" onClick={handleSaveEditSlab} style={{backgroundColor:'black',borderRadius:"12px"}}>
                 Save
               </Button>
+            
             </div>
           </DialogContent>
         </Dialog>
@@ -482,6 +601,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
           <DialogContent>
             <TextField
               label="Date"
+              type="date"
               value={newSlabRow.Date || ''}
               onChange={(e) => setNewSlabRow({ ...newSlabRow, Date: e.target.value })}
               fullWidth
@@ -503,6 +623,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
             />
             <TextField
               label="Length"
+              type="number"
               value={newSlabRow.Length}
               onChange={(e) => setNewSlabRow({ ...newSlabRow, Length: e.target.value })}
               fullWidth
@@ -510,6 +631,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
             />
             <TextField
               label="Breadth"
+              type="number"
               value={newSlabRow.Breadth}
               onChange={(e) => setNewSlabRow({ ...newSlabRow, Breadth: e.target.value })}
               fullWidth
@@ -541,6 +663,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
               <Button variant="contained" onClick={handleSaveNewSlabRow} style={{backgroundColor:'black',borderRadius:"12px"}}>
                 Save
               </Button>
+              
             </div>
           </DialogContent>
         </Dialog>

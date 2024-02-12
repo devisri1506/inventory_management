@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import {
   Paper,
   Table,
@@ -26,22 +29,18 @@ import { Header } from '../components';
 import { ordersGrid,ordersData} from '../data/Data';
 
 const Orders = () => {
-  const [editSlabRow, setEditSlabRow] = useState(null);
-  const [openEditSlabModal, setOpenEditSlabModal] = useState(false);
-  const [openNewSlabRowModal, setOpenNewSlabRowModal] = useState(false);
-  const [newSlabRow, setNewSlabRow] = useState({});
+  
   const [data, setData] = useState(ordersData.map(item => ({
     ...item,
     MeasurementCBM: item.Length * item.Width * item.Height,
   })));
   const [orderBy, setOrderBy] = useState('');
   const [order, setOrder] = useState('asc');
-  const [editRow, setEditRow] = useState(null);
+  const [editRow, setEditRow] = useState({});
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openNewRowModal, setOpenNewRowModal] = useState(false);
   const [newRow, setNewRow] = useState({});
-  const [selectedBlock, setSelectedBlock] = useState(null);
-  const [selectedBlockSlabs, setSelectedBlockSlabs] = useState([]);
+ 
   
 
   const handleSort = (property) => () => {
@@ -59,11 +58,13 @@ const Orders = () => {
   const handleEdit = (row) => {
     setEditRow(row);
     setOpenEditModal(true);
+    
   };
 
   const handleDelete = (row) => {
     const newData = data.filter((item) => item.BlockNumber !== row.BlockNumber);
     setData(newData);
+    toast.success("Order Deleted Successfully");
   };
 
   const handleNewRow = () => {
@@ -90,6 +91,7 @@ const Orders = () => {
     );
     setData(updatedData);
     setOpenEditModal(false);
+    toast.success("Order Edited Successfully");
   };
 
   const handleSaveNewRow = () => {
@@ -114,7 +116,7 @@ const Orders = () => {
       <Paper className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
         <Header category="Page" title="Orders" />
         <div className="text-left mt-4">
-                      <Button variant="contained" onClick={handleNewRow}>
+                      <Button variant="contained" onClick={handleNewRow} style={{backgroundColor:"Black", borderRadius:"12px"}}>
                         Place an order
                       </Button>
         </div>
@@ -166,23 +168,74 @@ const Orders = () => {
         <Dialog open={openEditModal} onClose={handleEditModalClose} className="text-center">
           <DialogTitle>Edit Order</DialogTitle>
           <DialogContent>
-            {editRow &&
-              ordersGrid.map((column, columnIndex) => (
-                <div key={columnIndex}>
-                    <TextField
-                      label={column.headerText}
-                      value={editRow[column.field]}
-                      onChange={(e) => setEditRow({ ...editRow, [column.field]: e.target.value })}
-                      fullWidth
-                      margin="normal"
-                    />
-                  
-                </div>
-              ))}
+            <TextField
+              label="Date"
+              type='date'
+              value={editRow.Date || ''}
+              onChange={(e) => setEditRow({ ...editRow, Date: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Order Id"
+              value={editRow.OrderId || ''}
+              onChange={(e) => setEditRow({ ...editRow, OrderId: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+          <TextField
+              label="Customer ID"
+              value={editRow.CustomerId|| ''}
+              onChange={(e) => setEditRow({ ...editRow, CustomerId: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Customer Name"
+             
+              value={editRow.CustomerName ||'' }
+              onChange={(e) => setEditRow({ ...editRow, CustomerName: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Customer Phone Number"
+              type="number"
+              value={editRow.CustomerPhoneNumber ||''}
+              onChange={(e) => setEditRow({ ...editRow, CustomerPhoneNumber: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Fresh"
+              type="number"
+              value={editRow.Fresh || ''}
+              onChange={(e) => setEditRow({ ...editRow, Fresh: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+           
+           <TextField
+              label="Light Defect"
+              type="number"
+              value={editRow.LightDefect || ''}
+              onChange={(e) => setEditRow({ ...editRow, LightDefect: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Defect"
+              type="number"
+              value={editRow.Defect || ''}
+              onChange={(e) => setEditRow({ ...editRow, Defect: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
             <div className="text-center mt-4">
-            <Button variant="contained" onClick={handleSaveEdit}>
-              Save
-            </Button>
+              <Button variant="contained" onClick={handleSaveEdit} style={{backgroundColor:'black',borderRadius:"12px"}}>
+                Save
+              </Button>
+            
             </div>
           </DialogContent>
         </Dialog>
