@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 import {
   Paper,
   Table,
@@ -27,6 +28,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Header } from '../components';
 import { ordersGrid,ordersData} from '../data/Data';
+import { useNavigate, NavLink } from "react-router-dom";
 
 const Orders = () => {
   
@@ -40,8 +42,7 @@ const Orders = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openNewRowModal, setOpenNewRowModal] = useState(false);
   const [newRow, setNewRow] = useState({});
- 
-  
+  const navigate = useNavigate();
 
   const handleSort = (property) => () => {
     const isAsc = orderBy === property && order === 'asc';
@@ -68,9 +69,7 @@ const Orders = () => {
   };
 
   const handleNewRow = () => {
-    setNewRow({
-    });
-    setOpenNewRowModal(true);
+    navigate("/new-order", { replace: true });
   };
 
 

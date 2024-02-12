@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import basestyle from "../Base.module.css";
 import loginstyle from "./Login.module.css";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, NavLink } from "react-router-dom";
 
 const Login = ({ setUserState }) => {
@@ -49,19 +50,19 @@ const Login = ({ setUserState }) => {
       const developer = { email: "developer@gmail.com", password: "developer123" };
 
       if (user.email === Admin.email && user.password === Admin.password) {
-        alert("Login successful!");
+        toast.success("Login successful!");
         setUserState(Admin);
         navigate("/ecommerce", { replace: true });
       } else if (user.email === employee.email && user.password === employee.password) {
-        alert("Login successful!");
+        Toast.success("Login successful!");
         setUserState(employee);
         navigate("./pages/Ecommerce.jsx", { replace: true });
       } else if (user.email === developer.email && user.password === developer.password) {
-        alert("Login successful!");
+        toast.success("Login successful!");
         setUserState(developer);
         navigate("./pages/Ecommerce.jsx", { replace: true });
       } else {
-        alert("Invalid email or password. Please try again.");
+        toast.error("Invalid email or password. Please try again.");
       }
     }
   }, [formErrors, isSubmit]);

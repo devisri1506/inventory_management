@@ -11,6 +11,7 @@ import './App.css';
 import { useState } from 'react';
 import { useStateContext } from './contexts/ContextProvider';
 import Orders from './pages/Orders';
+import NewOrder from './pages/NewOrder';
 
 const App = () => {
   const { setCurrentColor, setCurrentMode, currentMode, currentColor, themeSettings, setThemeSettings, activeMenu } = useStateContext();
@@ -98,6 +99,7 @@ const App = () => {
                 {/* pages  */}
                 <Route path="/Blocks" element={<Blocks/>} />
                 <Route path="/orders" element={<Orders />} />
+                <Route path="/new-order" element={<NewOrder />} />
                 <Route path="/employees" element={<Employees />} />
                 <Route path="/customers" element={<Customers />} />
 
