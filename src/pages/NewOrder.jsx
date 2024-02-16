@@ -33,6 +33,14 @@ const NewOrder = () => {
         console.log(value);
     };
 
+    const handleGstSelect = (event) => {
+      setNewRow((prev) => ({
+          ...prev,
+          hasGST: event.target.value,
+      }));
+  };
+  
+
     const handleNewSlab = () => {
         setOpenModal(true);
     };
@@ -93,19 +101,38 @@ const NewOrder = () => {
         <div className="md:w-10/12 sm:w-full mx-auto">
             <Paper className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
                 <Header category="Page" title="New Order" />
-                <div className="w-1/2 ">
-                  <TextField name="date" type="date" label="Date" variant='outlined' focused></TextField>
-                  <br />
-                  <br />
+                <div>
+                <div className=" flex space-x-4 ">
+                  <div className='w-1/2 flex space-x-4'>
+                  <TextField name="date" type="date" label="Date" variant='outlined' focused fullWidth></TextField>
+                  
+                  <Select
+                     value={newRow.hasGST || ''}
+                     onChange={handleGstSelect}
+                     variant="outlined"
+                     label="GST"
+                     margin="normal"
+                     placeholder="Select GST Status"
+                     fullWidth
+                  >
+                      <MenuItem value="GST">GST</MenuItem>
+                      <MenuItem value="NoGST">No GST</MenuItem>
+                  </Select>
+                  </div>
+                  <div className='w-1/2'>
                     <Autocomplete
                         options={[{ name: 'Balaji' }, { name: 'Devisri' }, { name: 'Suresh Babu' }]}
                         getOptionLabel={(option) => option.name}
                         renderInput={(params) => (
-                            <TextField {...params} label="Customer" variant="outlined" fullWidth />
+                            <TextField {...params} label="Customer" variant="outlined"   fullWidth  />
                         )}
                         onChange={handleCustomerSelect}
                     />
+                   </div>
+                  </div>
+                  <br />
                     <br />
+
                     <Button variant="contained" onClick={handleNewSlab} style={{ backgroundColor: 'black', borderRadius: '12px' }}>
                         Add Slab
                     </Button>

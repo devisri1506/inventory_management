@@ -101,13 +101,7 @@ export const blocksGrid = [
       width: '150',
       textAlign: 'Center',
     },
-    {
-      field: 'CustomerId',
-      headerText: 'Customer ID',
-      width: '150',
-      textAlign: 'Center'
-
-    },
+    
       { field: 'CustomerName',
         headerText: 'Customer Name',
         width: '150',
@@ -155,7 +149,15 @@ export const blocksGrid = [
         editType: 'numericedit',
       
       },
-      
+
+       {
+      headerText: 'Status',
+      template: gridOrderStatus,
+      editType: 'dropdownedit',
+      field: 'Status',
+      textAlign: 'Center',
+      width: '120',
+    },
       
     ];
     export const ordersData=
@@ -163,12 +165,12 @@ export const blocksGrid = [
     {
       Date:"01-06-2023",
       OrderId:1,
-      CustomerId:1,
       CustomerName:1,
       CustomerPhoneNumber:1,
         Fresh:1,
         LightDefect:1,
         Defect:1,
+        Status:"Pending",
       },
      
  ]

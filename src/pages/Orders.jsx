@@ -154,7 +154,7 @@ const Orders = () => {
                     
                   </TableCell>
                   <TableCell>
-                    <IconButton aria-label="delete" onClick={() => handleDelete(row)}>
+                    <IconButton aria-label="delete" color="error" onClick={() => handleDelete(row)}>
                       <DeleteIcon />
                     </IconButton>
                     </TableCell>
@@ -182,13 +182,7 @@ const Orders = () => {
               fullWidth
               margin="normal"
             />
-          <TextField
-              label="Customer ID"
-              value={editRow.CustomerId|| ''}
-              onChange={(e) => setEditRow({ ...editRow, CustomerId: e.target.value })}
-              fullWidth
-              margin="normal"
-            />
+          
             <TextField
               label="Customer Name"
              
@@ -230,6 +224,18 @@ const Orders = () => {
               fullWidth
               margin="normal"
             />
+            <Select
+              label="Status"
+              value={editRow.Status || 'Pending'}
+              onChange={(e) => setEditRow({ ...editRow, Status: e.target.value })}
+              fullWidth
+              margin='normal'
+            >
+              <MenuItem value="Pending">Pending</MenuItem>
+              <MenuItem value="Loading">Loading</MenuItem>
+              <MenuItem value="Completed">Completed</MenuItem>
+              
+            </Select>
             <div className="text-center mt-4">
               <Button variant="contained" onClick={handleSaveEdit} style={{backgroundColor:'black',borderRadius:"12px"}}>
                 Save
