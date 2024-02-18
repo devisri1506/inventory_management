@@ -73,16 +73,17 @@ const Blocks = () => {
     setSearchQuery(e.target.value);
   };
 
+  
   useEffect(() => {
-    axios.get('/block/all-blocks')
-        .then(response => {
-            setData(response.data);
-        })
-        .catch(error => {
-            console.error('Error fetching blocks:', error);
-        });
-}, []);
-
+    // Fetch data from your database
+    axios.get("http://localhost:8080/block/all-blocks")
+      .then((response) => {
+        setData(response.data.body); // Update blocksData state with fetched data
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []); 
 
   const handleSort =
     (property, isBlocksTable = true) =>
@@ -91,7 +92,7 @@ const Blocks = () => {
         const isAsc = orderBy === property && order === "asc";
         const sortedData = [...data].sort((a, b) => {
           if (a[property] < b[property]) return isAsc ? -1 : 1;
-          if (a[property] > b[property]) return isAsc ? 1 : -1;
+          if (a[property] > b[property]) return isAsc ? 1 : -1;   
           return 0;
         });
         setData(sortedData);
