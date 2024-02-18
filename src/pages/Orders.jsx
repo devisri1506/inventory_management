@@ -152,7 +152,7 @@ const Orders = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((row, rowIndex) => (
+            {filteredData.map((row, rowIndex) => (
                 <TableRow key={rowIndex} className="hover:bg-gray-100">
                   {ordersGrid.map((column, columnIndex) => (
                     <TableCell key={columnIndex} className="p-2 sm:p-3">

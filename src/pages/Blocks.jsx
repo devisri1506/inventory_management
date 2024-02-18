@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -43,7 +43,8 @@ const Blocks = () => {
   const [orderBy, setOrderBy] = useState("");
   const [slabsOrderBy, setSlabsOrderBy] = useState("");
   const [slabsOrder, setSlabsOrder] = useState("asc");
-
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [order, setOrder] = useState("asc");
   const [editRow, setEditRow] = useState({});
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -51,6 +52,15 @@ const Blocks = () => {
   const [newRow, setNewRow] = useState({});
   const [selectedBlock, setSelectedBlock] = useState(null);
   const [selectedBlockSlabs, setSelectedBlockSlabs] = useState([]);
+
+  useEffect(() => {
+    const filtered = data.filter(item => item.blockId.toString().toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1);
+    setFilteredData(filtered);
+  }, [data, searchQuery]);  
+  
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
   const handleSort =
     (property, isBlocksTable = true) =>
@@ -160,9 +170,7 @@ const Blocks = () => {
     const newData = [...data, newRowWithMeasurement];
     setData(newData);
     setOpenNewRowModal(false);
-    console.log(
-      "newData is: " + JSON.stringify(newRowWithMeasurementWithoutDate)
-    );
+   
     axios
       .post(
         "http://localhost:8080/block/new-block",
@@ -183,8 +191,16 @@ const Blocks = () => {
         return;
       })
       .catch((error) => {
-        console.log("new error: " + error);
-        toast.error("Block Not Created!");
+        toast.error("Block Not Created", {
+          position: "top-right",
+          autoClose: false,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       });
   };
 
@@ -277,7 +293,7 @@ const Blocks = () => {
     <div className="md:w-10/12 sm:w-full mx-auto">
       <Paper className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
         <Header category="Page" title="Blocks" />
-        <div className="text-left mt-4">
+        <div className="text-left mt-4 space-x-4">
           <Button
             variant="contained"
             onClick={handleNewRow}
@@ -285,6 +301,13 @@ const Blocks = () => {
           >
             Add Block
           </Button>
+          <TextField
+            label="Search by Block Number"
+            variant="outlined"
+            size="small"
+            value={searchQuery}
+            onChange={handleSearch}
+          />
         </div>
         <TableContainer>
           <Table className="min-w-full">
@@ -307,7 +330,7 @@ const Blocks = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((row, rowIndex) => (
+              {filteredData.map((row, rowIndex) => (
                 <TableRow key={rowIndex} className="hover:bg-gray-100">
                   {blocksGrid.map((column, columnIndex) => (
                     <TableCell
