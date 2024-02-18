@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -34,7 +34,8 @@ const Customers = () => {
     ...item,
   })));
   const [orderBy, setOrderBy] = useState('');
-
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [order, setOrder] = useState('asc');
   const [editRow, setEditRow] = useState({});
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -43,22 +44,27 @@ const Customers = () => {
   const [copyBillingToShipping, setCopyBillingToShipping] = useState(false);
   
   
+  useEffect(() => {
+    const filtered = data.filter(item => item.customerId.toString().toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1);
+    setFilteredData(filtered);
+  }, [data, searchQuery]);  
   
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   const handleSort = (property) => () => {
     const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+      const sortedData = [...data].sort((a, b) => {
+        if (a[property] < b[property]) return isAsc ? -1 : 1;
+        if (a[property] > b[property]) return isAsc ? 1 : -1;
+        return 0;
+      });
+      setData(sortedData);
+      setOrder(isAsc ? 'desc' : 'asc');
+      setOrderBy(property);
   };
   
-  function stableSort(array, cmp) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-      const order = cmp(a[0], b[0]);
-      if (order !== 0) return order;
-      return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-  }
 
   const handleEdit = (row) => {
     setEditRow(row);
@@ -68,7 +74,7 @@ const Customers = () => {
   const handleDelete = (row) => {
     const newData = data.filter((item) => item.customerId !== row.customerId);
     setData(newData);
-    toast.success("Block deleted Successfully");
+    toast.success("Customer deleted Successfully");
   };
 
   const handleNewRow = () => {
@@ -101,7 +107,7 @@ const Customers = () => {
   };
   const handleSaveNewRow = () => {
     // Check if all mandatory fields are filled
-    if (!newRow.customerId || !newRow.customerName || !newRow.billingAddress || !newRow.shippingAddress || !newRow.phoneNumber || !newRow.emailId) {
+    if (!newRow.customerId || !newRow.customerName || !newRow.billingAddress || !newRow.shippingAddress || !newRow.customerPhone || !newRow.customerEmailId) {
       toast.error('Please fill all mandatory fields.',{
         position: "top-right",
         autoClose: false,
@@ -148,10 +154,17 @@ const Customers = () => {
     <div className="md:w-10/12 sm:w-full mx-auto">
       <Paper className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl" >
       <Header category="Page" title="Customers" />
-        <div className="text-left mt-4">
+        <div className="text-left mt-4 space-x-4">
                       <Button variant="contained" onClick={handleNewRow} style={{backgroundColor:'black',borderRadius:"12px"}}>
                         Add New Customer
                       </Button>
+                      <TextField
+            label="Search by Customer ID"
+            variant="outlined"
+            size="small"
+            value={searchQuery}
+            onChange={handleSearch}
+          />
         </div>
         <TableContainer >
           <Table className="min-w-full" >
@@ -174,19 +187,19 @@ const Customers = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((row, rowIndex) => (
-                <TableRow key={rowIndex} className="hover:bg-gray-100">
-                  {customersGrid.map((column, columnIndex) => (
-                    <TableCell key={columnIndex} className="p-2 sm:p-3">
-                      {column.field === 'customerId' ? (
-                        <span style={{ cursor: 'pointer' }}>
-                          {row[column.field]}
-                        </span>
-                      ) : (
-                        row[column.field]
-                      )}
-                    </TableCell>
-                  ))}
+            {filteredData.map((row, rowIndex) => (
+              <TableRow key={rowIndex} className="hover:bg-gray-100">
+                {customersGrid.map((column, columnIndex) => (
+                  <TableCell key={columnIndex} className="p-2 sm:p-3">
+                    {column.field === 'customerId' ? (
+                      <span style={{ cursor: 'pointer' }}>
+                        {row[column.field]}
+                      </span>
+                    ) : (
+                      row[column.field]
+                    )}
+                  </TableCell>
+                ))}
                   <TableCell className="p-2 sm:p-3">
                     <IconButton aria-label="edit" onClick={() => handleEdit(row)}>
                       <EditIcon />
@@ -204,10 +217,11 @@ const Customers = () => {
         </TableContainer>
 
         <Dialog open={openEditModal} onClose={handleEditModalClose}  fullWidth >
-          <DialogTitle>Edit C</DialogTitle>
+          <DialogTitle>Edit Customer</DialogTitle>
           <DialogContent>
             <TextField
               label="Customer ID"
+              type="text"
               value={editRow.customerId || ''}
               onChange={(e) => setEditRow({ ...editRow, customerId: e.target.value })}
               fullWidth
@@ -244,16 +258,16 @@ const Customers = () => {
             <TextField
               label="Phone Number"
               type="number"
-              value={editRow.phoneNumber || ''}
-              onChange={(e) => setEditRow({ ...editRow, phoneNumber: e.target.value })}
+              value={editRow.customerPhone || ''}
+              onChange={(e) => setEditRow({ ...editRow, customerPhone: e.target.value })}
               fullWidth
               margin="normal"
             />
            <TextField
               label="Email ID"
               type="email"
-              value={editRow.emailId || ''}
-              onChange={(e) => setEditRow({ ...editRow, emailId: e.target.value })}
+              value={editRow.customerEmailId || ''}
+              onChange={(e) => setEditRow({ ...editRow, customerEmailId: e.target.value })}
               fullWidth
               margin="normal"
             />
@@ -275,6 +289,7 @@ const Customers = () => {
           <DialogContent>
             <TextField
               label="Customer ID"
+              type='text'
               value={newRow.customerId || ''}
               onChange={(e) => setNewRow({ ...newRow, customerId: e.target.value })}
               fullWidth
@@ -320,8 +335,8 @@ const Customers = () => {
             <TextField
               label="Phone Number"
               type="number"
-              value={newRow.phoneNumber || ''}
-              onChange={(e) => setNewRow({ ...newRow, phoneNumber: e.target.value })}
+              value={newRow.customerPhone || ''}
+              onChange={(e) => setNewRow({ ...newRow, customerPhone: e.target.value })}
               fullWidth
               margin="normal"
             />
@@ -329,8 +344,8 @@ const Customers = () => {
            <TextField
               label="Email ID"
               type="email"
-              value={newRow.emailId || ''}
-              onChange={(e) => setNewRow({ ...newRow, emailId: e.target.value })}
+              value={newRow.customerEmailId || ''}
+              onChange={(e) => setNewRow({ ...newRow, customerEmailId: e.target.value })}
               fullWidth
               margin="normal"
             />

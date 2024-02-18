@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -34,16 +34,25 @@ const Orders = () => {
   
   const [data, setData] = useState(ordersData.map(item => ({
     ...item,
-    MeasurementCBM: item.Length * item.Width * item.Height,
   })));
   const [orderBy, setOrderBy] = useState('');
   const [order, setOrder] = useState('asc');
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [editRow, setEditRow] = useState({});
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openNewRowModal, setOpenNewRowModal] = useState(false);
   const [newRow, setNewRow] = useState({});
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const filtered = data.filter(item => item.orderId.toString().toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1);
+    setFilteredData(filtered);
+  }, [data, searchQuery]);  
+  
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
   const handleSort = (property) => () => {
     const isAsc = orderBy === property && order === 'asc';
     const sortedData = [...data].sort((a, b) => {
@@ -63,7 +72,7 @@ const Orders = () => {
   };
 
   const handleDelete = (row) => {
-    const newData = data.filter((item) => item.BlockNumber !== row.BlockNumber);
+    const newData = data.filter((item) => item.orderId !== row.orderId);
     setData(newData);
     toast.success("Order Deleted Successfully");
   };
@@ -81,7 +90,7 @@ const Orders = () => {
 
   const handleSaveEdit = () => {
     const updatedData = data.map((item) =>
-      item.BlockNumber === editRow.BlockNumber
+      item.orderId === editRow.orderId
         ? {
             ...item,
             ...editRow,
@@ -94,18 +103,14 @@ const Orders = () => {
   };
 
   const handleSaveNewRow = () => {
-    const newRowWithMeasurement = {
-      ...newRow,
-      MeasurementCBM: newRow.Length * newRow.Width * newRow.Height,
-    };
-
-    const newData = [...data, newRowWithMeasurement];
+    
+    const newData = [...data, newRow];
     setData(newData);
     setOpenNewRowModal(false);
   };
 
   const handleCardClose = () => {
-    setSelectedBlock(null);
+    setSelectedOrder(null);
   };
 
   
@@ -114,10 +119,17 @@ const Orders = () => {
     <div className="md:w-10/12 sm:w-full mx-auto">
       <Paper className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
         <Header category="Page" title="Orders" />
-        <div className="text-left mt-4">
+        <div className="text-left mt-4 space-x-4">
                       <Button variant="contained" onClick={handleNewRow} style={{backgroundColor:"Black", borderRadius:"12px"}}>
                         Place an order
                       </Button>
+                      <TextField
+            label="Search by Order ID"
+            variant="outlined"
+            size="small"
+            value={searchQuery}
+            onChange={handleSearch}
+          />
         </div>
         <TableContainer >
           <Table className="min-w-full">
@@ -170,15 +182,15 @@ const Orders = () => {
             <TextField
               label="Date"
               type='date'
-              value={editRow.Date || ''}
-              onChange={(e) => setEditRow({ ...editRow, Date: e.target.value })}
+              value={editRow.entryDate || ''}
+              onChange={(e) => setEditRow({ ...editRow, entryDate: e.target.value })}
               fullWidth
               margin="normal"
             />
             <TextField
               label="Order Id"
-              value={editRow.OrderId || ''}
-              onChange={(e) => setEditRow({ ...editRow, OrderId: e.target.value })}
+              value={editRow.orderId || ''}
+              onChange={(e) => setEditRow({ ...editRow, orderId: e.target.value })}
               fullWidth
               margin="normal"
             />
@@ -186,24 +198,24 @@ const Orders = () => {
             <TextField
               label="Customer Name"
              
-              value={editRow.CustomerName ||'' }
-              onChange={(e) => setEditRow({ ...editRow, CustomerName: e.target.value })}
+              value={editRow.customerName ||'' }
+              onChange={(e) => setEditRow({ ...editRow, customerName: e.target.value })}
               fullWidth
               margin="normal"
             />
             <TextField
               label="Customer Phone Number"
               type="number"
-              value={editRow.CustomerPhoneNumber ||''}
-              onChange={(e) => setEditRow({ ...editRow, CustomerPhoneNumber: e.target.value })}
+              value={editRow.customerPhoneNumber ||''}
+              onChange={(e) => setEditRow({ ...editRow, customerPhoneNumber: e.target.value })}
               fullWidth
               margin="normal"
             />
             <TextField
               label="Fresh"
               type="number"
-              value={editRow.Fresh || ''}
-              onChange={(e) => setEditRow({ ...editRow, Fresh: e.target.value })}
+              value={editRow.fresh || ''}
+              onChange={(e) => setEditRow({ ...editRow, fresh: e.target.value })}
               fullWidth
               margin="normal"
             />
@@ -211,23 +223,23 @@ const Orders = () => {
            <TextField
               label="Light Defect"
               type="number"
-              value={editRow.LightDefect || ''}
-              onChange={(e) => setEditRow({ ...editRow, LightDefect: e.target.value })}
+              value={editRow.lightDefect || ''}
+              onChange={(e) => setEditRow({ ...editRow, lightDefect: e.target.value })}
               fullWidth
               margin="normal"
             />
             <TextField
               label="Defect"
               type="number"
-              value={editRow.Defect || ''}
-              onChange={(e) => setEditRow({ ...editRow, Defect: e.target.value })}
+              value={editRow.defect || ''}
+              onChange={(e) => setEditRow({ ...editRow, defect: e.target.value })}
               fullWidth
               margin="normal"
             />
             <Select
               label="Status"
-              value={editRow.Status || 'Pending'}
-              onChange={(e) => setEditRow({ ...editRow, Status: e.target.value })}
+              value={editRow.status || 'Pending'}
+              onChange={(e) => setEditRow({ ...editRow, status: e.target.value })}
               fullWidth
               margin='normal'
             >

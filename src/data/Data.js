@@ -21,7 +21,7 @@ export const gridOrderStatus = (props) => (
 );
 export const blocksGrid = [
   {
-    field: 'BlockNumber',
+    field: 'blockId',
     headerText: 'Block Number',
     width: '150',
     textAlign: 'Center',
@@ -35,13 +35,13 @@ export const blocksGrid = [
       </button>
     ),
   },
-    { field: 'QuarryNumber',
+    { field: 'quarryId',
       headerText: 'Quarry Number',
       width: '150',
       textAlign: 'Center',
     },
     {
-      field: 'Length',
+      field: 'length',
       headerText: 'Length',
       format: 'C2',
       textAlign: 'Center',
@@ -50,7 +50,7 @@ export const blocksGrid = [
     },
     
     {
-        field: 'Width',
+        field: 'width',
         headerText: 'Width',
 
         textAlign: 'Center',
@@ -58,7 +58,7 @@ export const blocksGrid = [
         width: '150',
       },
       {
-        field: 'Height',
+        field: 'height',
         headerText: 'Height',
         format: 'C2',
         textAlign: 'Center',
@@ -66,7 +66,7 @@ export const blocksGrid = [
         width: '150',
       },
       {
-        field: 'MeasurementCBM',
+        field: 'blockMeasurement',
         headerText: 'Measurement (cbm)',
         textAlign: 'Center',
         editType: 'numericedit',
@@ -79,12 +79,12 @@ export const blocksGrid = [
       headerText: 'Status',
       template: gridOrderStatus,
       editType: 'dropdownedit',
-      field: 'Status',
+      field: 'blockStatus',
       textAlign: 'Center',
       width: '120',
     },
     {
-      field: 'Date',
+      field: 'entryDate',
       headerText: 'Date',
       format: 'C2',
       textAlign: 'Center',
@@ -96,19 +96,19 @@ export const blocksGrid = [
   ];
   export const ordersGrid = [
     {
-      field: 'OrderId',
+      field: 'orderId',
       headerText: 'Order ID',
       width: '150',
       textAlign: 'Center',
     },
     
-      { field: 'CustomerName',
+      { field: 'customerName',
         headerText: 'Customer Name',
         width: '150',
         textAlign: 'Center',
       },
       {
-        field: 'CustomerPhoneNumber',
+        field: 'customerPhoneNumber',
         headerText: 'Customer Phone Number',
         format: 'C2',
         textAlign: 'Center',
@@ -117,7 +117,7 @@ export const blocksGrid = [
       },
       
       {
-          field: 'Fresh',
+          field: 'fresh',
           headerText: 'Fresh',
   
           textAlign: 'Center',
@@ -125,7 +125,7 @@ export const blocksGrid = [
           width: '150',
         },
         {
-          field: 'LightDefect',
+          field: 'lightDefect',
           headerText: 'Light Defect',
           format: 'C2',
           textAlign: 'Center',
@@ -133,7 +133,7 @@ export const blocksGrid = [
           width: '150',
         },
         {
-          field: 'Defect',
+          field: 'defect',
           headerText: 'Defect',
           textAlign: 'Center',
           editType: 'numericedit',
@@ -142,7 +142,7 @@ export const blocksGrid = [
         },
      
       {
-        field: 'Date',
+        field: 'entryDate',
         headerText: 'Date',
         format: 'C2',
         textAlign: 'Center',
@@ -154,7 +154,7 @@ export const blocksGrid = [
       headerText: 'Status',
       template: gridOrderStatus,
       editType: 'dropdownedit',
-      field: 'Status',
+      field: 'status',
       textAlign: 'Center',
       width: '120',
     },
@@ -163,14 +163,14 @@ export const blocksGrid = [
     export const ordersData=
  [
     {
-      Date:"01-06-2023",
-      OrderId:1,
-      CustomerName:1,
-      CustomerPhoneNumber:1,
-        Fresh:1,
-        LightDefect:1,
-        Defect:1,
-        Status:"Pending",
+      entryDate:"01-06-2023",
+      orderId:1,
+      customerName:1,
+      customerPhoneNumber:1,
+        fresh:1,
+        lightDefect:1,
+        defect:1,
+        status:"Pending",
       },
      
  ]
@@ -178,16 +178,16 @@ export const blocksGrid = [
     export const slabsGrid = [
      
       {
-        field: 'SlabNumber',
+        field: 'slabId',
         headerText: 'Slab Number',
         width: '150',
         textAlign: 'Center',
       },
       
-      { field: 'Length', headerText: 'Length', format: 'C2', textAlign: 'Center', editType: 'numericedit', width: '150' },
-      { field: 'Breadth', headerText: 'Breadth', textAlign: 'Center', editType: 'numericedit', width: '150' },
+      { field: 'length', headerText: 'Length', format: 'C2', textAlign: 'Center', editType: 'numericedit', width: '150' },
+      { field: 'breadth', headerText: 'Breadth', textAlign: 'Center', editType: 'numericedit', width: '150' },
       {
-        field: 'MeasurementSQFT',
+        field: 'slabMeasurement',
         headerText: 'Measurement (sqft)',
         textAlign: 'Center',
         editType: 'numericedit',
@@ -200,7 +200,7 @@ export const blocksGrid = [
         headerText: 'Type',
         template: gridOrderStatus,
         editType: 'dropdownedit',
-        field: 'Type',
+        field: 'slabType',
         textAlign: 'Center',
         width: '120',
       },
@@ -208,42 +208,41 @@ export const blocksGrid = [
         headerText: 'Status',
         template: gridOrderStatus,
         editType: 'dropdownedit',
-        field: 'Status',
+        field: 'slabStatus',
         textAlign: 'Center',
         width: '120',
       },
-      { field: 'Date', headerText: 'Date', width: '150', textAlign: 'Center' },
+      { field: 'producedOn', headerText: 'Date', width: '150', textAlign: 'Center' },
     ];
     export const slabData=
     [
        {
-         Date:'01-06-2023',
-           SlabNumber: 1,
-           BlockNumber: 1,
-           Length: 1,
-           Breadth: 2,
-           Type:'Fresh',
-           Status:'Pending',
+         producedOn:'01-06-2023',
+           slabId: 1,
+           blockId: 1,
+           length: 1,
+           breadth: 2,
+           slabType:'Fresh',
+           slabStatus:'Pending',
            StatusBg: '#FB9678',
            
          }
          
     ]
 
- export const blocksData=
- [
-    {
-      Date:"01-06-2023",
-        BlockNumber:1,
-        QuarryNumber:1,
-        Length:1,
-        Width:1,
-        Height:1,
-        Status:"Cutting"
-      },
-     
- ]
-
+    export const blocksData=
+    [
+       {
+           entryDate:"01-06-2023",
+           blockId:1,
+           quarryId:1,
+           length:1,
+           width:1,
+           height:1,
+           blockStatus:"Cutting"
+       },
+        
+    ]
  export const customersGrid = [
   {
     field: 'customerId',
@@ -276,13 +275,13 @@ export const blocksGrid = [
         width: '150',
       },
       {
-        field: 'phoneNumber',
+        field: 'customerPhone',
         headerText: 'Phone Number',
         textAlign: 'Center',
         width: '150',
       },
       {
-        field: 'emailId',
+        field: 'customerEmailId',
         headerText: 'Email ID',
         textAlign: 'Center',
         width: '100'
@@ -296,8 +295,8 @@ export const blocksGrid = [
       organizationName: "JBI",
       billingAddress: "a, b, banglore",
       shippingAddress: "a, b, banglore",
-      phoneNumber: 919959961204,
-      emailId: "balaji123@jbi.com"
+      customerPhone: 919959961204,
+      customerEmailId: "balaji123@jbi.com"
     },
       
   ]
