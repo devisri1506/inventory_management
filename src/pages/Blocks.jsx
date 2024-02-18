@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -44,9 +44,9 @@ const Blocks = () => {
   const [slabsOrderBy, setSlabsOrderBy] = useState("");
   const [slabsOrder, setSlabsOrder] = useState("asc");
   const [filteredData, setFilteredData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [filteredSlabData, setFilteredSlabData] = useState([]);
-  const [searchSlabQuery, setSearchSlabQuery] = useState('');
+  const [searchSlabQuery, setSearchSlabQuery] = useState("");
   const [order, setOrder] = useState("asc");
   const [editRow, setEditRow] = useState({});
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -56,34 +56,46 @@ const Blocks = () => {
   const [selectedBlockSlabs, setSelectedBlockSlabs] = useState([]);
 
   useEffect(() => {
-    const filtered = selectedBlockSlabs.filter(item => item.slabId.toString().toLowerCase().indexOf(searchSlabQuery.toLowerCase()) !== -1);
+    const filtered = selectedBlockSlabs.filter(
+      (item) =>
+        item.slabId
+          .toString()
+          .toLowerCase()
+          .indexOf(searchSlabQuery.toLowerCase()) !== -1
+    );
     setFilteredSlabData(filtered);
-  }, [selectedBlockSlabs, searchSlabQuery]);  
-  
+  }, [selectedBlockSlabs, searchSlabQuery]);
+
   const handleSearchSlab = (e) => {
     setSearchSlabQuery(e.target.value);
   };
 
   useEffect(() => {
-    const filtered = data.filter(item => item.blockId.toString().toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1);
+    const filtered = data.filter(
+      (item) =>
+        item.blockId
+          .toString()
+          .toLowerCase()
+          .indexOf(searchQuery.toLowerCase()) !== -1
+    );
     setFilteredData(filtered);
-  }, [data, searchQuery]);  
-  
+  }, [data, searchQuery]);
+
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  
   useEffect(() => {
     // Fetch data from your database
-    axios.get("http://localhost:8080/block/all-blocks")
+    axios
+      .get("http://localhost:8080/block/all-blocks")
       .then((response) => {
         setData(response.data.body); // Update blocksData state with fetched data
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, []); 
+  }, []);
 
   const handleSort =
     (property, isBlocksTable = true) =>
@@ -92,7 +104,7 @@ const Blocks = () => {
         const isAsc = orderBy === property && order === "asc";
         const sortedData = [...data].sort((a, b) => {
           if (a[property] < b[property]) return isAsc ? -1 : 1;
-          if (a[property] > b[property]) return isAsc ? 1 : -1;   
+          if (a[property] > b[property]) return isAsc ? 1 : -1;
           return 0;
         });
         setData(sortedData);
@@ -193,7 +205,7 @@ const Blocks = () => {
     const newData = [...data, newRowWithMeasurement];
     setData(newData);
     setOpenNewRowModal(false);
-   
+
     axios
       .post(
         "http://localhost:8080/block/new-block",
@@ -283,11 +295,7 @@ const Blocks = () => {
 
   const handleSaveNewSlabRow = () => {
     // Check if all mandatory fields are filled
-    if (
-      !newSlabRow.blockId ||
-      !newSlabRow.length ||
-      !newSlabRow.breadth
-    ) {
+    if (!newSlabRow.blockId || !newSlabRow.length || !newSlabRow.breadth) {
       toast.error("Please fill all mandatory fields.", {
         position: "top-right",
         autoClose: false,
@@ -311,6 +319,12 @@ const Blocks = () => {
     setOpenNewSlabRowModal(false);
     toast.success("New Slab Created successfully");
   };
+
+  const formatDate = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    return date.toISOString().split('T')[0]; // Extracts date part (YYYY-MM-DD)
+  };
+  
 
   return (
     <div className="md:w-10/12 sm:w-full mx-auto">
@@ -361,9 +375,9 @@ const Blocks = () => {
                       className="p-2 sm:p-3"
                       onClick={() => handleBlockClick(row)}
                     >
-                      {column.field === "blockId" ? (
-                        <span style={{ cursor: "pointer" }}>
-                          {row[column.field]}
+                      {column.field === "entryDate" ? (
+                        <span>
+                        {formatDate(row.entryDate)}
                         </span>
                       ) : (
                         row[column.field]
@@ -394,7 +408,7 @@ const Blocks = () => {
 
         <Dialog open={openEditModal} onClose={handleEditModalClose} fullWidth>
           <DialogTitle>Edit Block</DialogTitle>
-          
+
           <DialogContent>
             <TextField
               label="Date"
@@ -527,7 +541,9 @@ const Blocks = () => {
             <Select
               label="Status"
               value={newRow.blockStatus || ""}
-              onChange={(e) => setNewRow({ ...newRow, blockStatus: e.target.value })}
+              onChange={(e) =>
+                setNewRow({ ...newRow, blockStatus: e.target.value })
+              }
               fullWidth
             >
               <MenuItem value="Cutting">Cutting</MenuItem>
@@ -554,7 +570,7 @@ const Blocks = () => {
       >
         <DialogTitle>Slab Details</DialogTitle>
         <div className="text-left ml-6 ">
-        <TextField
+          <TextField
             label="Search by Slab Number"
             variant="outlined"
             size="small"
@@ -562,7 +578,7 @@ const Blocks = () => {
             onChange={handleSearchSlab}
             bold
           />
-          </div>
+        </div>
         <DialogContent>
           {selectedBlock && (
             <Card>
@@ -732,7 +748,6 @@ const Blocks = () => {
       >
         <DialogTitle>Create New Slab</DialogTitle>
         <DialogContent>
-        
           <TextField
             label="Block Number"
             value={newSlabRow.blockId}
