@@ -45,6 +45,8 @@ const Blocks = () => {
   const [slabsOrder, setSlabsOrder] = useState("asc");
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [filteredSlabData, setFilteredSlabData] = useState([]);
+  const [searchSlabQuery, setSearchSlabQuery] = useState('');
   const [order, setOrder] = useState("asc");
   const [editRow, setEditRow] = useState({});
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -54,6 +56,15 @@ const Blocks = () => {
   const [selectedBlockSlabs, setSelectedBlockSlabs] = useState([]);
 
   useEffect(() => {
+    const filtered = selectedBlockSlabs.filter(item => item.slabId.toString().toLowerCase().indexOf(searchSlabQuery.toLowerCase()) !== -1);
+    setFilteredSlabData(filtered);
+  }, [selectedBlockSlabs, searchSlabQuery]);  
+  
+  const handleSearchSlab = (e) => {
+    setSearchSlabQuery(e.target.value);
+  };
+
+  useEffect(() => {
     const filtered = data.filter(item => item.blockId.toString().toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1);
     setFilteredData(filtered);
   }, [data, searchQuery]);  
@@ -61,6 +72,17 @@ const Blocks = () => {
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
+
+  useEffect(() => {
+    axios.get('/block/all-blocks')
+        .then(response => {
+            setData(response.data);
+        })
+        .catch(error => {
+            console.error('Error fetching blocks:', error);
+        });
+}, []);
+
 
   const handleSort =
     (property, isBlocksTable = true) =>
@@ -371,6 +393,7 @@ const Blocks = () => {
 
         <Dialog open={openEditModal} onClose={handleEditModalClose} fullWidth>
           <DialogTitle>Edit Block</DialogTitle>
+          
           <DialogContent>
             <TextField
               label="Date"
@@ -529,6 +552,16 @@ const Blocks = () => {
         fullWidth
       >
         <DialogTitle>Slab Details</DialogTitle>
+        <div className="text-left ml-6 ">
+        <TextField
+            label="Search by Slab Number"
+            variant="outlined"
+            size="small"
+            value={searchSlabQuery}
+            onChange={handleSearchSlab}
+            bold
+          />
+          </div>
         <DialogContent>
           {selectedBlock && (
             <Card>
@@ -557,7 +590,7 @@ const Blocks = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {selectedBlockSlabs.map((row, rowIndex) => (
+                        {filteredSlabData.map((row, rowIndex) => (
                           <TableRow key={rowIndex}>
                             {slabsGrid.map((column, columnIndex) => (
                               <TableCell key={columnIndex}>
