@@ -243,6 +243,65 @@ export const blocksGrid = [
       },
      
  ]
+
+ export const customersGrid = [
+  {
+    field: 'customerId',
+    headerText: 'Customer ID',
+    width: '150',
+    textAlign: 'Center',
+  },
+    { field: 'customerName',
+      headerText: 'Customer Name',
+      width: '150',
+      textAlign: 'Center',
+    },
+    {
+      field: 'organizationName',
+      headerText: 'Organization Name',
+      textAlign: 'Center',
+      width: '100'
+    },
+    {
+      field: 'billingAddress',
+      headerText: 'Billing Address',
+      textAlign: 'Center',
+      width: '150',
+    },
+    
+    {
+        field: 'shippingAddress',
+        headerText: 'Shipping Address',
+        textAlign: 'Center',
+        width: '150',
+      },
+      {
+        field: 'phoneNumber',
+        headerText: 'Phone Number',
+        textAlign: 'Center',
+        width: '150',
+      },
+      {
+        field: 'emailId',
+        headerText: 'Email ID',
+        textAlign: 'Center',
+        width: '100'
+      },    
+  ];
+  export const customersData=
+  [
+    {
+      customerId: 1,
+      customerName: "Balaji",
+      organizationName: "JBI",
+      billingAddress: "a, b, banglore",
+      shippingAddress: "a, b, banglore",
+      phoneNumber: 919959961204,
+      emailId: "balaji123@jbi.com"
+    },
+      
+  ]
+
  export const contextMenuItems = [
     'AutoFit',
     'AutoFitAll',

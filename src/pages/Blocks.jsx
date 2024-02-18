@@ -149,19 +149,24 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
     const newData = [...data, newRowWithMeasurement];
     setData(newData);
     setOpenNewRowModal(false);
-    toast.success('New Block Created successfully'),{
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      }
     
-  ;
-    return;
+    axios.post('http://localhost:8080/block/new-block', newData)
+    .then(response => {
+      toast.success('New Block Created successfully'),{
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        };
+      return;
+    })
+    .catch(error => {
+       toast.error("Block Not Created!");
+    });
   };
 
   const handleCardClose = () => {
@@ -257,7 +262,7 @@ const [slabsOrder, setSlabsOrder] = useState('asc');
   };
   
 
-  
+
 
   return (
     <div className="md:w-10/12 sm:w-full mx-auto"> 
