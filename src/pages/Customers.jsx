@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Paper,
   Table,
@@ -217,7 +217,20 @@ const Customers = () => {
         </TableContainer>
 
         <Dialog open={openEditModal} onClose={handleEditModalClose}  fullWidth >
-          <DialogTitle>Edit Customer</DialogTitle>
+          <DialogTitle>Edit Customer
+          <IconButton
+      aria-label="close"
+      onClick={handleEditModalClose}
+      style={{
+        position: 'absolute',
+        right: 8,
+        top: 8,
+        color: (theme) => theme.palette.grey[500],
+      }}
+    >
+      <CloseIcon />
+    </IconButton>
+          </DialogTitle>
           <DialogContent>
             <TextField
               label="Customer ID"
@@ -284,7 +297,18 @@ const Customers = () => {
       {/* New Row Modal */}
         <Dialog open={openNewRowModal} onClose={handleNewRowModalClose} fullWidth>
           <DialogTitle>Create New Customer
-
+          <IconButton
+      aria-label="close"
+      onClick={handleNewRowModalClose}
+      style={{
+        position: 'absolute',
+        right: 8,
+        top: 8,
+        color: (theme) => theme.palette.grey[500],
+      }}
+    >
+      <CloseIcon />
+    </IconButton>
           </DialogTitle>
           <DialogContent>
             <TextField

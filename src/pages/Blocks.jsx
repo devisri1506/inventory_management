@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Paper,
   Table,
@@ -440,7 +441,21 @@ const Blocks = () => {
         </TableContainer>
 
         <Dialog open={openEditModal} onClose={handleEditModalClose} fullWidth>
-          <DialogTitle>Edit Block</DialogTitle>
+        <DialogTitle>
+    Edit Block
+    <IconButton
+      aria-label="close"
+      onClick={handleEditModalClose}
+      style={{
+        position: 'absolute',
+        right: 8,
+        top: 8,
+        color: (theme) => theme.palette.grey[500],
+      }}
+    >
+      <CloseIcon />
+    </IconButton>
+  </DialogTitle>
 
           <DialogContent>
             <TextField
@@ -534,7 +549,21 @@ const Blocks = () => {
           onClose={handleNewRowModalClose}
           fullWidth
         >
-          <DialogTitle>Create New Block</DialogTitle>
+           <DialogTitle>
+    Create New Block
+    <IconButton
+      aria-label="close"
+      onClick={handleNewRowModalClose}
+      style={{
+        position: 'absolute',
+        right: 8,
+        top: 8,
+        color: (theme) => theme.palette.grey[500],
+      }}
+    >
+      <CloseIcon />
+    </IconButton>
+  </DialogTitle>
           <DialogContent>
             <TextField
               label="Quarry Number"
@@ -696,7 +725,21 @@ const Blocks = () => {
         onClose={handleEditSlabModalClose}
         fullWidth
       >
-        <DialogTitle>Edit Slab</DialogTitle>
+       <DialogTitle>
+    Edit Slab
+    <IconButton
+      aria-label="close"
+      onClick={handleEditSlabModalClose}
+      style={{
+        position: 'absolute',
+        right: 8,
+        top: 8,
+        color: (theme) => theme.palette.grey[500],
+      }}
+    >
+      <CloseIcon />
+    </IconButton>
+  </DialogTitle>
         <DialogContent>
           <TextField
             label="Date"
@@ -779,7 +822,21 @@ const Blocks = () => {
         onClose={handleNewSlabRowModalClose}
         fullWidth
       >
-        <DialogTitle>Create New Slab</DialogTitle>
+       <DialogTitle>
+    Create New Slab
+    <IconButton
+      aria-label="close"
+      onClick={handleNewSlabRowModalClose}
+      style={{
+        position: 'absolute',
+        right: 8,
+        top: 8,
+        color: (theme) => theme.palette.grey[500],
+      }}
+    >
+      <CloseIcon />
+    </IconButton>
+  </DialogTitle>
         <DialogContent>
           <TextField
             label="Block Number"
