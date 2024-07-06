@@ -46,6 +46,7 @@ const Blocks = () => {
         console.error("Error fetching data:", error);
       });
   }, []);
+  const [blockNumber, setBlockNumber]=useState("");
   const [orderBy, setOrderBy] = useState("");
   const [slabsOrderBy, setSlabsOrderBy] = useState("");
   const [slabsOrder, setSlabsOrder] = useState("asc");
@@ -159,6 +160,7 @@ const Blocks = () => {
     const slabsForSelectedBlock = slabData.filter(
       (slab) => slab.blockId === row.blockId
     );
+    setBlockNumber(editRow.blockId);
     setSelectedBlockSlabs(slabsForSelectedBlock);
   };
 
@@ -843,11 +845,12 @@ const Blocks = () => {
         <DialogContent>
           <TextField
             label="Block Number"
-            value={newSlabRow.blockId}
+            value={blockNumber}
             onChange={(e) =>
               setNewSlabRow({ ...newSlabRow, blockId: e.target.value })
             }
             fullWidth
+            readonly
             margin="normal"
           />
           <TextField
