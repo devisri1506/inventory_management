@@ -34,12 +34,17 @@ const Blocks = () => {
   const [openEditSlabModal, setOpenEditSlabModal] = useState(false);
   const [openNewSlabRowModal, setOpenNewSlabRowModal] = useState(false);
   const [newSlabRow, setNewSlabRow] = useState({});
-  const [data, setData] = useState(
-    blocksData.map((item) => ({
-      ...item,
-      blockMeasurement: item.length * item.width * item.height,
-    }))
-  );
+  const [data, setData] = useState(() => {
+    // Fetch data from your database
+    axios
+      .get("http://localhost:8080/block/all-blocks")
+      .then((response) => {
+        setData(response.data.body); // Update blocksData state with fetched data
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
   const [orderBy, setOrderBy] = useState("");
   const [slabsOrderBy, setSlabsOrderBy] = useState("");
   const [slabsOrder, setSlabsOrder] = useState("asc");
@@ -56,12 +61,11 @@ const Blocks = () => {
   const [selectedBlockSlabs, setSelectedBlockSlabs] = useState([]);
 
   useEffect(() => {
-    const filtered = selectedBlockSlabs.filter(
-      (item) =>
-        item.slabId
-          .toString()
-          .toLowerCase()
-          .indexOf(searchSlabQuery.toLowerCase()) !== -1
+    if (selectedBlockSlabs == null) {
+      return;
+    }
+    const filtered = selectedBlockSlabs.filter((item) =>
+      String(item.slabId).startsWith(searchSlabQuery)
     );
     setFilteredSlabData(filtered);
   }, [selectedBlockSlabs, searchSlabQuery]);
@@ -71,12 +75,11 @@ const Blocks = () => {
   };
 
   useEffect(() => {
-    const filtered = data.filter(
-      (item) =>
-        item.blockId
-          .toString()
-          .toLowerCase()
-          .indexOf(searchQuery.toLowerCase()) !== -1
+    if (data == null) {
+      return;
+    }
+    const filtered = data.filter((item) =>
+      String(item.blockId).startsWith(searchQuery)
     );
     setFilteredData(filtered);
   }, [data, searchQuery]);
@@ -131,7 +134,18 @@ const Blocks = () => {
   const handleDelete = (row) => {
     const newData = data.filter((item) => item.blockId !== row.blockId);
     setData(newData);
-    toast.success("Block deleted Successfully");
+    const deletedData = data.filter((item) => item.blockId === row.blockId);
+    const blockId = deletedData[0].blockId; // Assuming editRow.blockId holds the value you want to include in the URL
+    const url = `http://localhost:8080/block/delete-block?blockId=${blockId}`;
+    axios
+      .delete(url)
+      .then((response) => {
+        toast.success("Block deleted Successfully"); // Handle successful response
+        //showAllRows();
+      })
+      .catch((error) => {
+        toast.error("Couldnt delete block"); // Handle error
+      });
   };
 
   const handleNewRow = () => {
@@ -167,12 +181,32 @@ const Blocks = () => {
     );
     setData(updatedData);
     setOpenEditModal(false);
-    toast.success("Block edited successfully");
+    var block_id = editRow.blockId;
+    var url = `http://localhost:8080/block/update-block?blockId=${block_id}`;
+    axios
+      .put(url, editRow)
+      .then((response) => {
+        toast.success("Block edited successfully");
+      })
+      .catch((error) => {
+        // Handle error
+        toast.error("Failed to update block");
+      });
   };
-
+  const showAllRows = () => {
+    axios
+      .get("http://localhost:8080/block/all-blocks")
+      .then((response) => {
+        setData(response.data.body);
+        console.log(response.data.body); // Update blocksData state with fetched data
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
   const handleSaveNewRow = () => {
     // Check if all mandatory fields are filled
-    if (!newRow.blockId || !newRow.length || !newRow.width || !newRow.height) {
+    if (!newRow.length || !newRow.width || !newRow.height) {
       toast.error("Please fill all mandatory fields.", {
         position: "top-right",
         autoClose: false,
@@ -183,7 +217,6 @@ const Blocks = () => {
         progress: undefined,
         theme: "light",
       });
-
       return;
     }
 
@@ -202,10 +235,6 @@ const Blocks = () => {
       blockMeasurement: newRow.length * newRow.width * newRow.height,
     };
 
-    const newData = [...data, newRowWithMeasurement];
-    setData(newData);
-    setOpenNewRowModal(false);
-
     axios
       .post(
         "http://localhost:8080/block/new-block",
@@ -223,7 +252,7 @@ const Blocks = () => {
             progress: undefined,
             theme: "light",
           };
-        return;
+        showAllRows();
       })
       .catch((error) => {
         toast.error("Block Not Created", {
@@ -237,6 +266,10 @@ const Blocks = () => {
           theme: "light",
         });
       });
+    const newData = [...data, newRowWithMeasurement];
+    setData(newData);
+    setOpenNewRowModal(false);
+    //showAllRows();
   };
 
   const handleCardClose = () => {
@@ -321,10 +354,12 @@ const Blocks = () => {
   };
 
   const formatDate = (dateTimeString) => {
+    if (!dateTimeString) {
+      return "";
+    }
     const date = new Date(dateTimeString);
-    return date.toISOString().split('T')[0]; // Extracts date part (YYYY-MM-DD)
+    return date.toISOString().split("T")[0]; // Extracts date part (YYYY-MM-DD)
   };
-  
 
   return (
     <div className="md:w-10/12 sm:w-full mx-auto">
@@ -376,9 +411,7 @@ const Blocks = () => {
                       onClick={() => handleBlockClick(row)}
                     >
                       {column.field === "entryDate" ? (
-                        <span>
-                        {formatDate(row.entryDate)}
-                        </span>
+                        <span>{formatDate(row.entryDate)}</span>
                       ) : (
                         row[column.field]
                       )}
@@ -413,7 +446,7 @@ const Blocks = () => {
             <TextField
               label="Date"
               type="date"
-              value={editRow.entryDate || ""}
+              value={formatDate(editRow.entryDate) || ""}
               onChange={(e) =>
                 setEditRow({ ...editRow, entryDate: e.target.value })
               }
