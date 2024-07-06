@@ -527,6 +527,7 @@ const Blocks = () => {
               }
               fullWidth
             >
+              <MenuItem value="Idle">Idle</MenuItem>
               <MenuItem value="Cutting">Cutting</MenuItem>
               <MenuItem value="Polishing">Polishing</MenuItem>
               <MenuItem value="Sales">Sales</MenuItem>
@@ -608,6 +609,7 @@ const Blocks = () => {
               }
               fullWidth
             >
+              <MenuItem value="Idle">Idle</MenuItem>
               <MenuItem value="Cutting">Cutting</MenuItem>
               <MenuItem value="Polishing">Polishing</MenuItem>
               <MenuItem value="Sales">Sales</MenuItem>
@@ -791,6 +793,7 @@ const Blocks = () => {
             fullWidth
           >
             <MenuItem value="Fresh">Fresh</MenuItem>
+            <MenuItem value="Unpolished">Unpolished</MenuItem>
             <MenuItem value="Defect">Defect</MenuItem>
             <MenuItem value="LightDefect">Light Defect</MenuItem>
           </Select>
@@ -876,6 +879,7 @@ const Blocks = () => {
             fullWidth
           >
             <MenuItem value="Fresh">Fresh</MenuItem>
+            <MenuItem value="Unpolished">Unpolished</MenuItem>
             <MenuItem value="Defect">Defect</MenuItem>
             <MenuItem value="LightDefect">Light Defect</MenuItem>
           </Select>
