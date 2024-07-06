@@ -230,12 +230,12 @@ const Blocks = () => {
     );
     const newRowWithMeasurement = {
       ...newRow,
-      blockMeasurement: newRow.length * newRow.width * newRow.height,
+      blockMeasurement: newRow.length * newRow.width * newRow.height/1000000,
     };
 
     const newRowWithMeasurementWithoutDate = {
       ...newRowWithoutDate,
-      blockMeasurement: newRow.length * newRow.width * newRow.height,
+      blockMeasurement: newRow.length * newRow.width * newRow.height/1000000,
     };
 
     axios
@@ -845,7 +845,7 @@ const Blocks = () => {
         <DialogContent>
           <TextField
             label="Block Number"
-            value={blockNumber}
+            value={editRow.blockId}
             onChange={(e) =>
               setNewSlabRow({ ...newSlabRow, blockId: e.target.value })
             }
