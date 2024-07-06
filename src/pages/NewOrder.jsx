@@ -17,6 +17,8 @@ import {
     DialogTitle,
     DialogContent,
 } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Header } from '../components';
@@ -106,18 +108,19 @@ const NewOrder = () => {
                   <div className='w-1/2 flex space-x-4'>
                   <TextField name="date" type="date" label="Date" variant='outlined' focused fullWidth></TextField>
                   
-                  <Select
-                     value={newRow.hasGST || ''}
-                     onChange={handleGstSelect}
-                     variant="outlined"
-                     label="GST"
-                     margin="normal"
-                     placeholder="Select GST Status"
-                     fullWidth
+                  <FormControl fullWidth>
+                  <InputLabel id="GST">GST</InputLabel>
+                    <Select
+                  labelId="GST"
+                  id="GST"
+                  value={newRow.hasGST || ''}
+                  label="GST"
+                  onChange={handleGstSelect}
                   >
-                      <MenuItem value="GST">GST</MenuItem>
-                      <MenuItem value="NoGST">No GST</MenuItem>
+                    <MenuItem value="GST">GST</MenuItem>
+                    <MenuItem value="NoGST">No GST</MenuItem>
                   </Select>
+              </FormControl>
                   </div>
                   <div className='w-1/2'>
                     <Autocomplete
@@ -160,7 +163,7 @@ const NewOrder = () => {
                     </Select>
                     <br />
                     <br/>
-<div className="text-center mt-4">
+                    <div className="text-center mt-4">
                     <Button variant="contained" onClick={handleFormSubmit} style={{backgroundColor:'black',borderRadius:"12px"}}>
                         Save
                     </Button>
