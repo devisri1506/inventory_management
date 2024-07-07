@@ -160,7 +160,7 @@ const Blocks = () => {
     const slabsForSelectedBlock = slabData.filter(
       (slab) => slab.blockId === row.blockId
     );
-    setBlockNumber(editRow.blockId);
+    setBlockNumber(row.blockId);
     setSelectedBlockSlabs(slabsForSelectedBlock);
   };
 
@@ -178,7 +178,7 @@ const Blocks = () => {
         ? {
             ...item,
             ...editRow,
-            blockMeasurement: editRow.length * editRow.width * editRow.height,
+            blockMeasurement: (editRow.length * editRow.width * editRow.height/1000000).toFixed(3),
           }
         : item
     );
@@ -230,12 +230,12 @@ const Blocks = () => {
     );
     const newRowWithMeasurement = {
       ...newRow,
-      blockMeasurement: newRow.length * newRow.width * newRow.height/1000000,
+      blockMeasurement: (newRow.length * newRow.width * newRow.height/1000000).toFixed(3),
     };
 
     const newRowWithMeasurementWithoutDate = {
       ...newRowWithoutDate,
-      blockMeasurement: newRow.length * newRow.width * newRow.height/1000000,
+      blockMeasurement: (newRow.length * newRow.width * newRow.height/1000000).toFixed(3),
     };
 
     axios
@@ -320,7 +320,7 @@ const Blocks = () => {
         ? {
             ...slab,
             ...editSlabRow,
-            slabMeasurement: editSlabRow.length * editSlabRow.breadth,
+            slabMeasurement: (editSlabRow.length * editSlabRow.breadth/144).toFixed(2),
           }
         : slab
     );
@@ -347,7 +347,7 @@ const Blocks = () => {
 
     const newSlabRowWithMeasurement = {
       ...newSlabRow,
-      slabMeasurement: newSlabRow.length * newSlabRow.breadth,
+      slabMeasurement: (newSlabRow.length * newSlabRow.breadth/144).toFixed(2),
     };
 
     const newSlabData = [...selectedBlockSlabs, newSlabRowWithMeasurement];
