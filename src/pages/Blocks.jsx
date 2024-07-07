@@ -353,7 +353,10 @@ const Blocks = () => {
     axios
     .post(
       "http://localhost:8080/slab/new-slab",
-      blockNumber,newSlabRowWithMeasurement
+      {
+        blockId:blockNumber,
+        slab: newSlabRowWithMeasurement
+      }
     )
     .then((response) => {
       toast.success("New Slab Created successfully"),
