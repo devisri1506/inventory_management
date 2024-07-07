@@ -331,7 +331,7 @@ const Blocks = () => {
 
   const handleSaveNewSlabRow = () => {
     // Check if all mandatory fields are filled
-    if (!newSlabRow.blockId || !newSlabRow.length || !newSlabRow.breadth) {
+    if (!newSlabRow.length || !newSlabRow.breadth) {
       toast.error("Please fill all mandatory fields.", {
         position: "top-right",
         autoClose: false,
