@@ -347,13 +347,45 @@ const Blocks = () => {
 
     const newSlabRowWithMeasurement = {
       ...newSlabRow,
-      slabMeasurement: (newSlabRow.length * newSlabRow.breadth/144).toFixed(2),
+      slabMeasurement: ((newSlabRow.length * newSlabRow.breadth)/144).toFixed(2),
     };
+
+    axios
+    .post(
+      "http://localhost:8080/slab/new-slab",
+      blockNumber,newSlabRowWithMeasurement
+    )
+    .then((response) => {
+      toast.success("New Slab Created successfully"),
+        {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        };
+      showAllRows();
+    })
+    .catch((error) => {
+      toast.error("Slab Not Created", {
+        position: "top-right",
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    });
 
     const newSlabData = [...selectedBlockSlabs, newSlabRowWithMeasurement];
     setSelectedBlockSlabs(newSlabData);
     setOpenNewSlabRowModal(false);
-    toast.success("New Slab Created successfully");
+   
   };
 
   const formatDate = (dateTimeString) => {
