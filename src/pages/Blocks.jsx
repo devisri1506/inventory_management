@@ -845,12 +845,12 @@ const Blocks = () => {
         <DialogContent>
           <TextField
             label="Block Number"
-            value={editRow.blockId}
+            defaultValue={blockNumber}
             onChange={(e) =>
               setNewSlabRow({ ...newSlabRow, blockId: e.target.value })
             }
             fullWidth
-            readonly
+            disabled
             margin="normal"
           />
           <TextField
