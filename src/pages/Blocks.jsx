@@ -326,7 +326,30 @@ const Blocks = () => {
     );
     setSelectedBlockSlabs(updatedSlabData);
     setOpenEditSlabModal(false);
-    toast.success("Slab edited successfully");
+    var slab_id = editSlabRow.slabId;
+    var url = `http://localhost:8080/slab/update-slab?slabId=${slab_id}`;
+    axios
+      .put(url, editSlabRow)
+      .then((response) => {
+        toast.success("Slab edited successfully");
+        showAllSlabRows();
+      })
+      .catch((error) => {
+        // Handle error
+        toast.error("Failed to update slab");
+      });
+  };
+
+  const showAllSlabRows = () => {
+    axios
+      .get(`http://localhost:8080/slab/get-slabs-by-blockId?blockId=${blockNumber}`)
+      .then((response) => {
+        setData(response.data.body);
+        console.log(response.data.body); // Update blocksData state with fetched data
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   };
 
   const handleSaveNewSlabRow = () => {
@@ -349,6 +372,7 @@ const Blocks = () => {
       ...newSlabRow,
       slabMeasurement: ((newSlabRow.length * newSlabRow.breadth)/144).toFixed(2),
     };
+
     var blockID=blockNumber
     var newSlabUrl=`http://localhost:8080/slab/new-slab?blockId=${blockID}`
     axios
@@ -366,6 +390,7 @@ const Blocks = () => {
           theme: "light",
         };
       showAllRows();
+      showAllSlabRows();
     })
     .catch((error) => {
       toast.error("Slab Not Created", {
