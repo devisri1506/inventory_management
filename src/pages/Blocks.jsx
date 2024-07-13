@@ -162,6 +162,7 @@ const Blocks = () => {
     );
     setBlockNumber(row.blockId);
     setSelectedBlockSlabs(slabsForSelectedBlock);
+    showAllSlabRows(row.blockId);
   };
 
   const handleEditModalClose = () => {
@@ -332,7 +333,7 @@ const Blocks = () => {
       .put(url, editSlabRow)
       .then((response) => {
         toast.success("Slab edited successfully");
-        showAllSlabRows();
+        showAllSlabRows(editSlabRow.blockId);
       })
       .catch((error) => {
         // Handle error
@@ -340,12 +341,13 @@ const Blocks = () => {
       });
   };
 
-  const showAllSlabRows = () => {
+  const showAllSlabRows = (block_number) => {
+    var allSlabsUrl = `http://localhost:8080/slab/get-slabs-by-blockId?blockId=${block_number}`;
     axios
-      .get(`http://localhost:8080/slab/get-slabs-by-blockId?blockId=${blockNumber}`)
+      .get(allSlabsUrl)
       .then((response) => {
-        setData(response.data.body);
-        console.log(response.data.body); // Update blocksData state with fetched data
+        setSelectedBlockSlabs(response.data.body);
+        console.log(block_number); // Update blocksData state with fetched data
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -390,7 +392,7 @@ const Blocks = () => {
           theme: "light",
         };
       showAllRows();
-      showAllSlabRows();
+      showAllSlabRows(blockID);
     })
     .catch((error) => {
       toast.error("Slab Not Created", {
