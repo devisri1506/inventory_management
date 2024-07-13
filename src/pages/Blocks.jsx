@@ -745,11 +745,10 @@ const Blocks = () => {
                           <TableRow key={rowIndex}>
                             {slabsGrid.map((column, columnIndex) => (
                               <TableCell key={columnIndex}>
-                                {column.field === "slabMeasurement" ? (
-                                  <span>
-                                    {((row.length * row.breadth)/144).toFixed(2)}
-                                  </span>
-                                ) : (
+                                
+                                {column.field === "producedOn" ? (
+                        <span>{formatDate(row.producedOn)}</span>
+                          ) : (
                                   row[column.field]
                                 )}
                               </TableCell>
