@@ -67,7 +67,7 @@ const Blocks = () => {
       return;
     }
     const filtered = selectedBlockSlabs.filter((item) =>
-      String(item.slabId).startsWith(searchSlabQuery)
+      String(item.slabId).toLowerCase().includes(searchSlabQuery.toLowerCase())
     );
     setFilteredSlabData(filtered);
   }, [selectedBlockSlabs, searchSlabQuery]);
@@ -81,7 +81,7 @@ const Blocks = () => {
       return;
     }
     const filtered = data.filter((item) =>
-      String(item.blockId).startsWith(searchQuery)
+      String(item.blockId).toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredData(filtered);
   }, [data, searchQuery]);
@@ -290,7 +290,18 @@ const Blocks = () => {
       (slab) => slab.slabId !== row.slabId
     );
     setSelectedBlockSlabs(newSlabData);
-    toast.success("Slab deleted successfully");
+    const deletedSlabData = selectedBlockSlabs.filter((item) => item.slabId === row.slabId);
+    const slabId = deletedSlabData[0].slabId; // Assuming editRow.blockId holds the value you want to include in the URL
+    const url = `http://localhost:8080/slab/delete-slab?slabId=${slabId}`;
+    axios
+      .delete(url)
+      .then((response) => {
+        toast.success("Slab deleted Successfully"); // Handle successful response
+        //showAllRows();
+      })
+      .catch((error) => {
+        toast.error("Couldnt delete Slab"); // Handle error
+      });
   };
 
   const handleNewSlabRow = () => {
@@ -736,7 +747,7 @@ const Blocks = () => {
                               <TableCell key={columnIndex}>
                                 {column.field === "slabMeasurement" ? (
                                   <span>
-                                    {(row.length * row.breadth).toFixed(2)}
+                                    {((row.length * row.breadth)/144).toFixed(2)}
                                   </span>
                                 ) : (
                                   row[column.field]
