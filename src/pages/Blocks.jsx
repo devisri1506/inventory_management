@@ -349,15 +349,10 @@ const Blocks = () => {
       ...newSlabRow,
       slabMeasurement: ((newSlabRow.length * newSlabRow.breadth)/144).toFixed(2),
     };
-
+    var blockID=blockNumber
+    var newSlabUrl=`http://localhost:8080/slab/new-slab?blockId=${blockID}`
     axios
-    .post(
-      "http://localhost:8080/slab/new-slab",
-      {
-        blockId:blockNumber,
-        slab: newSlabRowWithMeasurement
-      }
-    )
+    .post(newSlabUrl, newSlabRowWithMeasurement)
     .then((response) => {
       toast.success("New Slab Created successfully"),
         {
