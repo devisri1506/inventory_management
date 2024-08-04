@@ -35,6 +35,11 @@ const Blocks = () => {
   const [openEditSlabModal, setOpenEditSlabModal] = useState(false);
   const [openNewSlabRowModal, setOpenNewSlabRowModal] = useState(false);
   const [newSlabRow, setNewSlabRow] = useState({});
+  const [status, setStatus] = useState('Idle');
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [isFormVisible, setFormVisible] = useState(false);
+  const [length, setLength] = useState('');
+  const [width, setWidth] = useState('');
   const [data, setData] = useState(() => {
     // Fetch data from your database
     axios
@@ -322,6 +327,11 @@ const Blocks = () => {
     setOpenEditSlabModal(false);
   };
 
+  const handleStatusClick = () => {
+    setPopupVisible(true);
+
+};
+
   const handleNewSlabRowModalClose = () => {
     setOpenNewSlabRowModal(false);
   };
@@ -365,6 +375,32 @@ const Blocks = () => {
       });
   };
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    let nextStatus = '';
+    switch (status) {
+        case 'Idle':
+            nextStatus = 'Cutting';
+            break;
+        case 'Cutting':
+            nextStatus = 'Chipping';
+            break;
+        case 'Chipping':
+            nextStatus = 'Polishing';
+            break;
+        case 'Polishing':
+            nextStatus = 'Sales';
+            break;
+        default:
+            break;
+    }
+    newRow.status=nextStatus;
+    setStatus(nextStatus);
+    setFormVisible(false);
+    setLength('');
+    setWidth('');
+};
+
   const handleSaveNewSlabRow = () => {
     // Check if all mandatory fields are filled
     if (!newSlabRow.length || !newSlabRow.breadth) {
@@ -380,6 +416,7 @@ const Blocks = () => {
       });
       return;
     }
+
 
     const newSlabRowWithMeasurement = {
       ...newSlabRow,
@@ -665,25 +702,22 @@ const Blocks = () => {
               label="Height"
               type="number"
               value={newRow.height || ""}
+              
               onChange={(e) => setNewRow({ ...newRow, height: e.target.value })}
               fullWidth
               margin="normal"
             />
-
-            <label htmlFor="">Status</label>
-            <Select
+             <TextField
               label="Status"
-              value={newRow.blockStatus || ""}
+              value="IDLE"
               onChange={(e) =>
-                setNewRow({ ...newRow, blockStatus: e.target.value })
+                setNewRow({ ...newRow, blockStatus: "IDLE" })
               }
+              disabled
               fullWidth
-            >
-              <MenuItem value="Idle">Idle</MenuItem>
-              <MenuItem value="Cutting">Cutting</MenuItem>
-              <MenuItem value="Polishing">Polishing</MenuItem>
-              <MenuItem value="Sales">Sales</MenuItem>
-            </Select>
+              margin="normal"
+            />
+            
             <div className="text-center mt-4">
               <Button
                 variant="contained"
