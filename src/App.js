@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { useStateContext } from './contexts/ContextProvider';
 import Orders from './pages/Orders';
 import NewOrder from './pages/NewOrder';
+import Marking from './pages/Marking';
 
 const App = () => {
   const { setCurrentColor, setCurrentMode, currentMode, currentColor, themeSettings, setThemeSettings, activeMenu } = useStateContext();
@@ -102,6 +103,8 @@ const App = () => {
                 <Route path="/new-order" element={<NewOrder />} />
                 <Route path="/employees" element={<Employees />} />
                 <Route path="/customers" element={<Customers />} />
+                <Route path="/marking" element={<Marking />} />
+
 
                 {/* apps  */}
                 <Route path="/kanban" element={<Kanban />} />

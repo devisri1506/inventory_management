@@ -1,5 +1,5 @@
 import React from 'react';
-import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock,AiOutlineBlock } from 'react-icons/ai';
+import { AiOutlineCalendar, AiOutlineBook,AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock,AiOutlineBlock } from 'react-icons/ai';
 import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
 import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
@@ -34,7 +34,7 @@ export const blocksGrid = [
         {props.BlockNumber}
       </button>
     ),
-  },
+  },  
     { field: 'quarryId',
       headerText: 'Quarry Number',
       width: '150',
@@ -45,7 +45,7 @@ export const blocksGrid = [
       headerText: 'Length',
       format: 'C2',
       textAlign: 'Center',
-      editType: 'numericedit',
+      editType: 'numericedit',  
       width: '150',
     },
     
@@ -94,6 +94,157 @@ export const blocksGrid = [
     
     
   ];
+  export const blocksData=
+  [
+     {
+         entryDate:"01-06-2023",
+         blockId:1,
+         quarryId:1,
+         length:1,
+         width:1,
+         height:1,
+         blockStatus:"Cutting"
+     },
+      
+  ]
+  export const markingBlocksGrid = [
+    {
+      field: 'blockId',
+      headerText: 'Block Number',
+      width: '150',
+      textAlign: 'Center',
+      template: (props) => (
+        <button
+          type="button"
+          className="block-number-link"
+          onClick={() => props.onBlockClick(props.BlockNumber)}
+        >
+          {props.BlockNumber}
+        </button>
+      ),
+    },  
+      { field: 'quarryId',
+        headerText: 'Quarry Number',
+        width: '150',
+        textAlign: 'Center',
+      },
+      {
+        field: 'grossLength',
+        headerText: 'Gross Length',
+        format: 'C2',
+        textAlign: 'Center',
+        editType: 'numericedit',  
+        width: '150',
+      },
+      
+      {
+          field: 'grossWidth',
+          headerText: 'Gross Width',
+  
+          textAlign: 'Center',
+          editType: 'numericedit',
+          width: '150',
+        },
+        {
+          field: 'grossHeight',
+          headerText: 'Gross Height',
+          format: 'C2',
+          textAlign: 'Center',
+          editType: 'numericedit',
+          width: '150',
+        },
+        {
+          field: 'blockMeasurement',
+          headerText: 'Measurement (cbm)',
+          textAlign: 'Center',
+          editType: 'numericedit',
+          width: '100',
+          template: (props) => (
+            <span>{props.grossLength * props.grossWidth * props.grossHeight}</span>
+          ),
+        },
+      
+        { 
+          field: 'status',
+          headerText: 'Status',
+          width: '150',
+          textAlign: 'Center',
+        },
+      
+      {
+        field: 'entryDate',
+        headerText: 'Date',
+        format: 'C2',
+        textAlign: 'Center',
+        editType: 'numericedit',
+      
+      },
+      
+      
+    ];
+    export const markingBlocksData=
+    [
+       {
+           entryDate:"01-06-2023",
+           blockId:1,
+           markingId:1,
+           quarryId:1,
+           grossLength:1,
+           grossWidth:1,
+           grossHeight:1,
+           status:"Marked"
+       },
+        
+    ]
+  export const markingsGrid = [
+    {
+      field: 'markingId',
+      headerText: 'Marking ID',
+      width: '150',
+      textAlign: 'Center',
+      template: (props) => (
+        <button
+          type="button"
+          className="marking-number-link"
+          onClick={() => props.onMarkingClick(props.markingId)}
+        >
+          {props.markingId}
+        </button>
+      ),
+    },
+      { field: 'quarryName',
+        headerText: 'Quarry Name',
+        width: '150',
+        textAlign: 'Center',
+      },
+    
+        {
+          field: 'totalMeasurement',
+          headerText: 'Measurement (cbm)',
+          textAlign: 'Center',
+          editType: 'numericedit',
+          width: '100',
+        },
+     
+      {
+        field: 'entryDate',
+        headerText: 'Date',
+        format: 'C2',
+        textAlign: 'Center',
+        editType: 'numericedit',
+      
+      },
+    ];
+    export const markingsData=
+    [
+       {
+           entryDate:"01-06-2023",
+           markingId:1,
+           quarryName:"Velikacharla",
+           totalMeasurement:10,
+       },
+        
+    ]
   export const ordersGrid = [
     {
       field: 'orderId',
@@ -230,19 +381,7 @@ export const blocksGrid = [
          
     ]
 
-    export const blocksData=
-    [
-       {
-           entryDate:"01-06-2023",
-           blockId:1,
-           quarryId:1,
-           length:1,
-           width:1,
-           height:1,
-           blockStatus:"Cutting"
-       },
-        
-    ]
+   
  export const customersGrid = [
   {
     field: 'customerId',
@@ -301,6 +440,60 @@ export const blocksGrid = [
       
   ]
 
+  export const employeesGrid = [
+    {
+      field: 'employeeId',
+      headerText: 'Employee ID',
+      width: '150',
+      textAlign: 'Center',
+    },
+      { field: 'employeeName',
+        headerText: 'Employee Name',
+        width: '150',
+        textAlign: 'Center',
+      },
+      {
+        field: 'designation',
+        headerText: 'Designation',
+        textAlign: 'Center',
+        width: '100'
+      },
+      
+        {
+          field: 'aadharCardNumber',
+          headerText: 'Aadhar Card Number',
+          textAlign: 'Center',
+          width: '150',
+        },
+        {
+          field: 'aadharCardPhoto',
+          headerText: 'Aadhar Card Photo',
+          textAlign: 'Center',
+          width: '100'
+        },   
+        
+        {
+          field: 'employeePhone',
+          headerText: 'Employee Phone Number',
+          textAlign: 'Center',
+          width: '150',
+        },
+    ];
+    export const employeesData=
+    [
+      {
+        employeeId: 1,
+        employeeName: "Balaji",
+        designation: "JBI",
+        aadharCardNumber: "901209230239",
+        aadharCardPhoto: "",
+        employeePhone: 919959961204,
+       
+      },
+        
+    ]
+
+    
  export const contextMenuItems = [
     'AutoFit',
     'AutoFitAll',
@@ -349,6 +542,10 @@ export const blocksGrid = [
           name: 'customers',
           icon: <RiContactsLine />,
         },
+        {
+          name: 'marking',
+          icon: <AiOutlineBook />,
+        }
       ],
     },
     {
