@@ -65,6 +65,7 @@ export const blocksGrid = [
         editType: 'numericedit',
         width: '150',
       },
+      
       {
         field: 'blockMeasurement',
         headerText: 'Measurement (cbm)',
@@ -154,6 +155,14 @@ export const blocksGrid = [
           width: '150',
         },
         {
+          field: 'alliance',
+          headerText: 'Alliance',
+          format: 'C2',
+          textAlign: 'Center',
+          editType: 'numericedit',
+          width: '150',
+        },
+        {
           field: 'blockMeasurement',
           headerText: 'Measurement (cbm)',
           textAlign: 'Center',
@@ -192,6 +201,7 @@ export const blocksGrid = [
            grossLength:1,
            grossWidth:1,
            grossHeight:1,
+           alliance:1,
            status:"Marked"
        },
         

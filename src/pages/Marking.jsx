@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CloseIcon from '@mui/icons-material/Close';
+import axios from "axios";
 import {
   Paper,
   Table,
@@ -35,9 +36,17 @@ const Marking = () => {
   const [openNewBlockRowModal, setOpenNewBlockRowModal] = useState(false);
   const [newBlockRow, setNewBlockRow] = useState({});
 
-  const [data, setData] = useState(markingsData.map(item => ({
-    ...item,
-  })));
+  const [data, setData] = useState(() => {
+    // Fetch data from your database
+    axios
+      .get("http://localhost:8080/marking/all-blocks")
+      .then((response) => {
+        setData(response.data.body); // Update blocksData state with fetched data
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
   const [markingId, setmarkingId]=useState("");
   const [orderBy, setOrderBy] = useState('');
   const [blocksOrderBy, setBlocksOrderBy] = useState("");
@@ -80,6 +89,19 @@ const Marking = () => {
     setSearchQuery(e.target.value);
   };
 
+  useEffect(() => {
+    // Fetch data from your database
+    axios
+      .get("http://localhost:8080/marking/all-blocks")
+      .then((response) => {
+        setData(response.data.body); // Update blocksData state with fetched data
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+
   const handleSort =
   (property, isMarkingsTable = true) =>
   () => {
@@ -115,7 +137,18 @@ const Marking = () => {
   const handleDelete = (row) => {
     const newData = data.filter((item) => item.markingId !== row.markingId);
     setData(newData);
-    toast.success("Marking deleted Successfully");
+    const deletedData = data.filter((item) => item.markingId === row.markingId);
+    const markingId = deletedData[0].markingId; // Assuming editRow.blockId holds the value you want to include in the URL
+    const url = `http://localhost:8080/marking/delete-marking?markingId=${markingId}`;
+    axios
+      .delete(url)
+      .then((response) => {
+        toast.success("marking deleted Successfully"); // Handle successful response
+        //showAllRows();
+      })
+      .catch((error) => {
+        toast.error("Couldnt delete Marking"); // Handle error
+      });
   };
 
   const handleNewRow = () => {
@@ -155,7 +188,28 @@ const Marking = () => {
     );
     setData(updatedData);
     setOpenEditModal(false);
-    toast.success('Marking edited successfully')
+    var marking_id = editRow.markingId;
+    var url = `http://localhost:8080/marking/update-marking?markingId=${marking_id}`;
+    axios
+      .put(url, editRow)
+      .then((response) => {
+        toast.success("Marking edited successfully");
+      })
+      .catch((error) => {
+        // Handle error
+        toast.error("Failed to update Marking");
+      });
+  };
+  const showAllRows = () => {
+    axios
+      .get("http://localhost:8080/marking/all-blocks")
+      .then((response) => {
+        setData(response.data.body);
+        console.log(response.data.body); // Update blocksData state with fetched data
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   };
   const handleSaveNewRow = () => {
     // Check if all mandatory fields are filled
@@ -172,23 +226,45 @@ const Marking = () => {
       });      
       return;
     }   
+
+    axios
+      .post(
+        "http://localhost:8080/marking/new-marking",
+        newRow
+      )
+      .then((response) => {
+        toast.success("New Marking Created successfully"),
+          {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          };
+        showAllRows();
+      })
+      .catch((error) => {
+        toast.error("Marking Not Created", {
+          position: "top-right",
+          autoClose: false,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      });
   
     const newData = [...data, newRow];
   
     // Update the state with the new data
     setData(newData);
     setOpenNewRowModal(false);
-    toast.success('New Marking Created successfully'),{
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      };
-    return;
+   
   };
 
   const handleCardClose = () => {
@@ -214,6 +290,7 @@ const Marking = () => {
            grossLength:"",
            grossWidth:"",
            grossHeight:"",
+           alliance:"",
            status:"Marked"
     });
     setOpenNewBlockRowModal(true);

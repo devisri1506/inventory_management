@@ -156,7 +156,13 @@ const Blocks = () => {
   };
 
   const handleNewRow = () => {
-    setNewRow({});
+    setNewRow({
+       quarryId:"",
+       length:"",
+        width:"",
+       height:"",
+      blockStatus:"IDLE"
+    });
     setOpenNewRowModal(true);
   };
 
@@ -625,20 +631,16 @@ const Blocks = () => {
               margin="normal"
             />
 
-            <label htmlFor="">Status</label>
-            <Select
+          <TextField
               label="Status"
-              value={editRow.blockStatus || "Pending"}
+              value="IDLE"
               onChange={(e) =>
-                setEditRow({ ...editRow, blockStatus: e.target.value })
+                setEditRow({ ...editRow, blockStatus: "IDLE" })
               }
+              disabled
               fullWidth
-            >
-              <MenuItem value="Idle">Idle</MenuItem>
-              <MenuItem value="Cutting">Cutting</MenuItem>
-              <MenuItem value="Polishing">Polishing</MenuItem>
-              <MenuItem value="Sales">Sales</MenuItem>
-            </Select>
+              margin="normal"
+            />
             <div className="text-center mt-4">
               <Button
                 variant="contained"
@@ -711,7 +713,7 @@ const Blocks = () => {
               label="Status"
               value="IDLE"
               onChange={(e) =>
-                setNewRow({ ...newRow, blockStatus: "IDLE" })
+                setNewRow({ ...newRow, blockStatus: "IDLE     " })
               }
               disabled
               fullWidth
