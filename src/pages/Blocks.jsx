@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Paper,
   Table,
@@ -35,15 +35,15 @@ const Blocks = () => {
   const [openEditSlabModal, setOpenEditSlabModal] = useState(false);
   const [openNewSlabRowModal, setOpenNewSlabRowModal] = useState(false);
   const [newSlabRow, setNewSlabRow] = useState({});
-  const [status, setStatus] = useState('Idle');
+  const [status, setStatus] = useState("Idle");
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [isFormVisible, setFormVisible] = useState(false);
-  const [length, setLength] = useState('');
-  const [width, setWidth] = useState('');
+  const [length, setLength] = useState("");
+  const [width, setWidth] = useState("");
   const [data, setData] = useState(() => {
     // Fetch data from your database
     axios
-      .get("http://localhost:8080/block/all-blocks")
+      .get("https://jbi-backend-kip7.onrender.com/block/all-blocks")
       .then((response) => {
         setData(response.data.body); // Update blocksData state with fetched data
       })
@@ -51,7 +51,7 @@ const Blocks = () => {
         console.error("Error fetching data:", error);
       });
   }, []);
-  const [blockNumber, setBlockNumber]=useState("");
+  const [blockNumber, setBlockNumber] = useState("");
   const [orderBy, setOrderBy] = useState("");
   const [slabsOrderBy, setSlabsOrderBy] = useState("");
   const [slabsOrder, setSlabsOrder] = useState("asc");
@@ -98,7 +98,7 @@ const Blocks = () => {
   useEffect(() => {
     // Fetch data from your database
     axios
-      .get("http://localhost:8080/block/all-blocks")
+      .get("https://jbi-backend-kip7.onrender.com/block/all-blocks")
       .then((response) => {
         setData(response.data.body); // Update blocksData state with fetched data
       })
@@ -143,7 +143,7 @@ const Blocks = () => {
     setData(newData);
     const deletedData = data.filter((item) => item.blockId === row.blockId);
     const blockId = deletedData[0].blockId; // Assuming editRow.blockId holds the value you want to include in the URL
-    const url = `http://localhost:8080/block/delete-block?blockId=${blockId}`;
+    const url = `https://jbi-backend-kip7.onrender.com/block/delete-block?blockId=${blockId}`;
     axios
       .delete(url)
       .then((response) => {
@@ -157,11 +157,11 @@ const Blocks = () => {
 
   const handleNewRow = () => {
     setNewRow({
-       quarryId:"",
-       length:"",
-        width:"",
-       height:"",
-      blockStatus:"IDLE"
+      quarryId: "",
+      length: "",
+      width: "",
+      height: "",
+      blockStatus: "IDLE",
     });
     setOpenNewRowModal(true);
   };
@@ -190,14 +190,17 @@ const Blocks = () => {
         ? {
             ...item,
             ...editRow,
-            blockMeasurement: (editRow.length * editRow.width * editRow.height/1000000).toFixed(3),
+            blockMeasurement: (
+              (editRow.length * editRow.width * editRow.height) /
+              1000000
+            ).toFixed(3),
           }
         : item
     );
     setData(updatedData);
     setOpenEditModal(false);
     var block_id = editRow.blockId;
-    var url = `http://localhost:8080/block/update-block?blockId=${block_id}`;
+    var url = `https://jbi-backend-kip7.onrender.com/block/update-block?blockId=${block_id}`;
     axios
       .put(url, editRow)
       .then((response) => {
@@ -210,7 +213,7 @@ const Blocks = () => {
   };
   const showAllRows = () => {
     axios
-      .get("http://localhost:8080/block/all-blocks")
+      .get("https://jbi-backend-kip7.onrender.com/block/all-blocks")
       .then((response) => {
         setData(response.data.body);
         console.log(response.data.body); // Update blocksData state with fetched data
@@ -242,17 +245,23 @@ const Blocks = () => {
     );
     const newRowWithMeasurement = {
       ...newRow,
-      blockMeasurement: (newRow.length * newRow.width * newRow.height/1000000).toFixed(3),
+      blockMeasurement: (
+        (newRow.length * newRow.width * newRow.height) /
+        1000000
+      ).toFixed(3),
     };
 
     const newRowWithMeasurementWithoutDate = {
       ...newRowWithoutDate,
-      blockMeasurement: (newRow.length * newRow.width * newRow.height/1000000).toFixed(3),
+      blockMeasurement: (
+        (newRow.length * newRow.width * newRow.height) /
+        1000000
+      ).toFixed(3),
     };
 
     axios
       .post(
-        "http://localhost:8080/block/new-block",
+        "https://jbi-backend-kip7.onrender.com/block/new-block",
         newRowWithMeasurementWithoutDate
       )
       .then((response) => {
@@ -301,9 +310,11 @@ const Blocks = () => {
       (slab) => slab.slabId !== row.slabId
     );
     setSelectedBlockSlabs(newSlabData);
-    const deletedSlabData = selectedBlockSlabs.filter((item) => item.slabId === row.slabId);
+    const deletedSlabData = selectedBlockSlabs.filter(
+      (item) => item.slabId === row.slabId
+    );
     const slabId = deletedSlabData[0].slabId; // Assuming editRow.blockId holds the value you want to include in the URL
-    const url = `http://localhost:8080/slab/delete-slab?slabId=${slabId}`;
+    const url = `https://jbi-backend-kip7.onrender.com/slab/delete-slab?slabId=${slabId}`;
     axios
       .delete(url)
       .then((response) => {
@@ -335,8 +346,7 @@ const Blocks = () => {
 
   const handleStatusClick = () => {
     setPopupVisible(true);
-
-};
+  };
 
   const handleNewSlabRowModalClose = () => {
     setOpenNewSlabRowModal(false);
@@ -348,14 +358,17 @@ const Blocks = () => {
         ? {
             ...slab,
             ...editSlabRow,
-            slabMeasurement: (editSlabRow.length * editSlabRow.breadth/144).toFixed(2),
+            slabMeasurement: (
+              (editSlabRow.length * editSlabRow.breadth) /
+              144
+            ).toFixed(2),
           }
         : slab
     );
     setSelectedBlockSlabs(updatedSlabData);
     setOpenEditSlabModal(false);
     var slab_id = editSlabRow.slabId;
-    var url = `http://localhost:8080/slab/update-slab?slabId=${slab_id}`;
+    var url = `https://jbi-backend-kip7.onrender.com/slab/update-slab?slabId=${slab_id}`;
     axios
       .put(url, editSlabRow)
       .then((response) => {
@@ -369,7 +382,7 @@ const Blocks = () => {
   };
 
   const showAllSlabRows = (block_number) => {
-    var allSlabsUrl = `http://localhost:8080/slab/get-slabs-by-blockId?blockId=${block_number}`;
+    var allSlabsUrl = `https://jbi-backend-kip7.onrender.com/slab/get-slabs-by-blockId?blockId=${block_number}`;
     axios
       .get(allSlabsUrl)
       .then((response) => {
@@ -383,29 +396,29 @@ const Blocks = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    let nextStatus = '';
+    let nextStatus = "";
     switch (status) {
-        case 'Idle':
-            nextStatus = 'Cutting';
-            break;
-        case 'Cutting':
-            nextStatus = 'Chipping';
-            break;
-        case 'Chipping':
-            nextStatus = 'Polishing';
-            break;
-        case 'Polishing':
-            nextStatus = 'Sales';
-            break;
-        default:
-            break;
+      case "Idle":
+        nextStatus = "Cutting";
+        break;
+      case "Cutting":
+        nextStatus = "Chipping";
+        break;
+      case "Chipping":
+        nextStatus = "Polishing";
+        break;
+      case "Polishing":
+        nextStatus = "Sales";
+        break;
+      default:
+        break;
     }
-    newRow.status=nextStatus;
+    newRow.status = nextStatus;
     setStatus(nextStatus);
     setFormVisible(false);
-    setLength('');
-    setWidth('');
-};
+    setLength("");
+    setWidth("");
+  };
 
   const handleSaveNewSlabRow = () => {
     // Check if all mandatory fields are filled
@@ -423,48 +436,48 @@ const Blocks = () => {
       return;
     }
 
-
     const newSlabRowWithMeasurement = {
       ...newSlabRow,
-      slabMeasurement: ((newSlabRow.length * newSlabRow.breadth)/144).toFixed(2),
+      slabMeasurement: ((newSlabRow.length * newSlabRow.breadth) / 144).toFixed(
+        2
+      ),
     };
 
-    var blockID=blockNumber
-    var newSlabUrl=`http://localhost:8080/slab/new-slab?blockId=${blockID}`
+    var blockID = blockNumber;
+    var newSlabUrl = `https://jbi-backend-kip7.onrender.com/slab/new-slab?blockId=${blockID}`;
     axios
-    .post(newSlabUrl, newSlabRowWithMeasurement)
-    .then((response) => {
-      toast.success("New Slab Created successfully"),
-        {
+      .post(newSlabUrl, newSlabRowWithMeasurement)
+      .then((response) => {
+        toast.success("New Slab Created successfully"),
+          {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          };
+        showAllRows();
+        showAllSlabRows(blockID);
+      })
+      .catch((error) => {
+        toast.error("Slab Not Created", {
           position: "top-right",
-          autoClose: 1000,
+          autoClose: false,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
           theme: "light",
-        };
-      showAllRows();
-      showAllSlabRows(blockID);
-    })
-    .catch((error) => {
-      toast.error("Slab Not Created", {
-        position: "top-right",
-        autoClose: false,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
+        });
       });
-    });
 
     const newSlabData = [...selectedBlockSlabs, newSlabRowWithMeasurement];
     setSelectedBlockSlabs(newSlabData);
     setOpenNewSlabRowModal(false);
-   
   };
 
   const formatDate = (dateTimeString) => {
@@ -554,21 +567,21 @@ const Blocks = () => {
         </TableContainer>
 
         <Dialog open={openEditModal} onClose={handleEditModalClose} fullWidth>
-        <DialogTitle>
-    Edit Block
-    <IconButton
-      aria-label="close"
-      onClick={handleEditModalClose}
-      style={{
-        position: 'absolute',
-        right: 8,
-        top: 8,
-        color: (theme) => theme.palette.grey[500],
-      }}
-    >
-      <CloseIcon />
-    </IconButton>
-  </DialogTitle>
+          <DialogTitle>
+            Edit Block
+            <IconButton
+              aria-label="close"
+              onClick={handleEditModalClose}
+              style={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
 
           <DialogContent>
             <TextField
@@ -631,12 +644,10 @@ const Blocks = () => {
               margin="normal"
             />
 
-          <TextField
+            <TextField
               label="Status"
               value="IDLE"
-              onChange={(e) =>
-                setEditRow({ ...editRow, blockStatus: "IDLE" })
-              }
+              onChange={(e) => setEditRow({ ...editRow, blockStatus: "IDLE" })}
               disabled
               fullWidth
               margin="normal"
@@ -659,21 +670,21 @@ const Blocks = () => {
           onClose={handleNewRowModalClose}
           fullWidth
         >
-           <DialogTitle>
-    Create New Block
-    <IconButton
-      aria-label="close"
-      onClick={handleNewRowModalClose}
-      style={{
-        position: 'absolute',
-        right: 8,
-        top: 8,
-        color: (theme) => theme.palette.grey[500],
-      }}
-    >
-      <CloseIcon />
-    </IconButton>
-  </DialogTitle>
+          <DialogTitle>
+            Create New Block
+            <IconButton
+              aria-label="close"
+              onClick={handleNewRowModalClose}
+              style={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
           <DialogContent>
             <TextField
               label="Quarry Number"
@@ -704,12 +715,11 @@ const Blocks = () => {
               label="Height"
               type="number"
               value={newRow.height || ""}
-              
               onChange={(e) => setNewRow({ ...newRow, height: e.target.value })}
               fullWidth
               margin="normal"
             />
-             <TextField
+            <TextField
               label="Status"
               value="IDLE"
               onChange={(e) =>
@@ -719,7 +729,7 @@ const Blocks = () => {
               fullWidth
               margin="normal"
             />
-            
+
             <div className="text-center mt-4">
               <Button
                 variant="contained"
@@ -781,10 +791,9 @@ const Blocks = () => {
                           <TableRow key={rowIndex}>
                             {slabsGrid.map((column, columnIndex) => (
                               <TableCell key={columnIndex}>
-                                
                                 {column.field === "producedOn" ? (
-                        <span>{formatDate(row.producedOn)}</span>
-                          ) : (
+                                  <span>{formatDate(row.producedOn)}</span>
+                                ) : (
                                   row[column.field]
                                 )}
                               </TableCell>
@@ -832,21 +841,21 @@ const Blocks = () => {
         onClose={handleEditSlabModalClose}
         fullWidth
       >
-       <DialogTitle>
-    Edit Slab
-    <IconButton
-      aria-label="close"
-      onClick={handleEditSlabModalClose}
-      style={{
-        position: 'absolute',
-        right: 8,
-        top: 8,
-        color: (theme) => theme.palette.grey[500],
-      }}
-    >
-      <CloseIcon />
-    </IconButton>
-  </DialogTitle>
+        <DialogTitle>
+          Edit Slab
+          <IconButton
+            aria-label="close"
+            onClick={handleEditSlabModalClose}
+            style={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
         <DialogContent>
           <TextField
             label="Date"
@@ -930,21 +939,21 @@ const Blocks = () => {
         onClose={handleNewSlabRowModalClose}
         fullWidth
       >
-       <DialogTitle>
-    Create New Slab
-    <IconButton
-      aria-label="close"
-      onClick={handleNewSlabRowModalClose}
-      style={{
-        position: 'absolute',
-        right: 8,
-        top: 8,
-        color: (theme) => theme.palette.grey[500],
-      }}
-    >
-      <CloseIcon />
-    </IconButton>
-  </DialogTitle>
+        <DialogTitle>
+          Create New Slab
+          <IconButton
+            aria-label="close"
+            onClick={handleNewSlabRowModalClose}
+            style={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
         <DialogContent>
           <TextField
             label="Block Number"
